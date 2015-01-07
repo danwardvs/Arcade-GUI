@@ -2,6 +2,7 @@
 #include<alpng.h>
 #include<time.h>
 #include <windows.h>
+#include<shellapi.h>
 
 BITMAP* buffer;
 
@@ -52,14 +53,14 @@ void abort_on_error(const char *message){
 }
 
 void update(){
-  if(key[KEY_P])ShellExecute(NULL, "open", "\minijim.exe", NULL, NULL, SW_SHOWDEFAULT);
+  if(key[KEY_P])ShellExecute(NULL, "open", "C:\\Users\\Danward\\Documents\\GitHub\\Arcade-GUI\\build\\minijim.exe", NULL, NULL, SW_SHOWDEFAULT);
 
 
 
 }
 
 void draw(){
-
+    rectfill(buffer,0,0,1024,768,makecol(255,255,255));
     draw_sprite(screen,buffer,0,0);
 }
 
