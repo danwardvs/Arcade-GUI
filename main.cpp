@@ -1,6 +1,7 @@
 #include<allegro.h>
 #include<alpng.h>
 #include<time.h>
+#include <windows.h>
 
 BITMAP* buffer;
 
@@ -51,6 +52,7 @@ void abort_on_error(const char *message){
 }
 
 void update(){
+  if(key[KEY_P])ShellExecute(NULL, "open", "\minijim.exe", NULL, NULL, SW_SHOWDEFAULT);
 
 
 
@@ -110,7 +112,7 @@ int main(){
 
 
 
-  set_window_title("Sci-Fi game!");
+  set_window_title("Arcade GUI");
   setup();
 
 

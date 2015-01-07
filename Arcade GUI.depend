@@ -1,6 +1,7 @@
 # depslib dependency file v1.0
-1412374746 source:c:\users\danward\documents\github\arcade-gui\main.cpp
+1420580444 source:c:\users\danward\documents\github\arcade-gui\main.cpp
 	<allegro.h>
 	<alpng.h>
 	<time.h>
+	<windows.h>
 
