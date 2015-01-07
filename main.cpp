@@ -5,6 +5,10 @@
 #include<shellapi.h>
 
 BITMAP* buffer;
+BITMAP* cursor;
+
+BITMAP* icon_steam;
+BITMAP* icon_csgo;
 
 bool close_button_pressed;
 
@@ -61,6 +65,9 @@ void update(){
 
 void draw(){
     rectfill(buffer,0,0,1024,768,makecol(255,255,255));
+    draw_sprite(buffer,icon_steam,200,200);
+    draw_sprite(buffer,icon_csgo,500,200);
+    draw_sprite(buffer,cursor,mouse_x,mouse_y);
     draw_sprite(screen,buffer,0,0);
 }
 
@@ -89,8 +96,13 @@ void setup(){
     LOCK_FUNCTION(close_button_handler);
     set_close_button_callback(close_button_handler);
 
-   // if (!(bmp = load_bitmap("bmp.png", NULL)))
-   //   abort_on_error("Cannot find image bmp.png\nPlease check your files and try again");
+  if (!(icon_steam = load_bitmap("icons/icon_steam.png", NULL)))
+      abort_on_error("Cannot find image icons/icon_steam.png\nPlease check your files and try again");
+  if (!(icon_csgo = load_bitmap("icons/icon_csgo.png", NULL)))
+      abort_on_error("Cannot find image icons/icon_csgo.png\nPlease check your files and try again");
+  if (!(cursor = load_bitmap("cursor.png", NULL)))
+      abort_on_error("Cannot find image cursor.png\nPlease check your files and try again");
+
 }
 
 
