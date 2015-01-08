@@ -9,6 +9,7 @@ BITMAP* cursor;
 
 BITMAP* icon_steam;
 BITMAP* icon_csgo;
+BITMAP* icon_garrysmod;
 
 bool close_button_pressed;
 
@@ -20,6 +21,17 @@ volatile int game_time = 0;
 int fps;
 int frames_done;
 int old_time;
+int game_focus;
+int step;
+
+struct game{
+  int x;
+  int y;
+  int internal_id;
+  int is_steamgame;
+  int steam_id;
+  char* path;
+}game[100];
 
 void ticker(){
   ticks++;
@@ -35,6 +47,14 @@ void close_button_handler(void){
   close_button_pressed = TRUE;
 }
 END_OF_FUNCTION(close_button_handler)
+
+//Area clicked
+bool location_clicked(int min_x,int max_x,int min_y,int max_y){
+    if(mouse_x>min_x && mouse_x<max_x && mouse_y>min_y && mouse_y<max_y && mouse_b & 1 || mouse_x>min_x && mouse_x<max_x && mouse_y>min_y && mouse_y<max_y && joy[0].button[1].b)
+        return true;
+    else return false;
+}
+
 
 // Random number generator. Use int random(highest,lowest);
 int random(int newLowest, int newHighest)
@@ -57,16 +77,31 @@ void abort_on_error(const char *message){
 }
 
 void update(){
-  if(key[KEY_P])ShellExecute(NULL, "open", "C:\\Users\\Danward\\Documents\\GitHub\\Arcade-GUI\\build\\minijim.exe", NULL, NULL, SW_SHOWDEFAULT);
+  if(key[KEY_C])ShellExecute(NULL, "open", "E:\\Steam Games\\Steam is a piece of shit\\steamapps\\common\\Counter-Strike Global Offensive\\csgo.exe", NULL, NULL, SW_SHOWDEFAULT);
+  if(location_clicked(500,700,200,400))ShellExecute(NULL, "open", "steam://rungameid/730", NULL, NULL, SW_SHOWDEFAULT);
+  if(location_clicked(800,1000,200,400))ShellExecute(NULL, "open", "steam://rungameid/4000", NULL, NULL, SW_SHOWDEFAULT);
 
 
+  if(location_clicked(200,400,200,400))ShellExecute(NULL, "open", "C:\\Program Files (x86)\\Steam\\steam.exe", NULL, NULL, SW_SHOWDEFAULT);
+  if(location_clicked(0,400,0,SCREEN_H) && step>9){
+    step=0;
+    game_focus++;
+  }
+
+  if(location_clicked(SCREEN_W-400,SCREEN_W,0,SCREEN_H) && step>9){
+    step=0;
+    game_focus--;
+  }
+
+  step++;
 
 }
 
 void draw(){
     rectfill(buffer,0,0,1024,768,makecol(255,255,255));
-    draw_sprite(buffer,icon_steam,200,200);
-    draw_sprite(buffer,icon_csgo,500,200);
+    draw_sprite(buffer,icon_steam,0+(game_focus*200),200);
+    draw_sprite(buffer,icon_csgo,300+(game_focus*200),200);
+    draw_sprite(buffer,icon_garrysmod,600+(game_focus*200),200);
     draw_sprite(buffer,cursor,mouse_x,mouse_y);
     draw_sprite(screen,buffer,0,0);
 }
@@ -100,6 +135,8 @@ void setup(){
       abort_on_error("Cannot find image icons/icon_steam.png\nPlease check your files and try again");
   if (!(icon_csgo = load_bitmap("icons/icon_csgo.png", NULL)))
       abort_on_error("Cannot find image icons/icon_csgo.png\nPlease check your files and try again");
+  if (!(icon_garrysmod = load_bitmap("icons/icon_garrysmod.png", NULL)))
+      abort_on_error("Cannot find image icons/icon_garrysmod.png\nPlease check your files and try again");
   if (!(cursor = load_bitmap("cursor.png", NULL)))
       abort_on_error("Cannot find image cursor.png\nPlease check your files and try again");
 
