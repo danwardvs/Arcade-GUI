@@ -15,6 +15,8 @@ BITMAP* icon_steam;
 BITMAP* icon_csgo;
 BITMAP* icon_garrysmod;
 BITMAP* icon_dayofdefeat;
+BITMAP* icon_mame;
+BITMAP* icon_lol;
 
 bool close_button_pressed;
 
@@ -31,17 +33,14 @@ int step;
 
 int settings[5];
 
-int background_r=255;
+int background_r=200;
 int background_g=200;
-int background_b=200;
+int background_b=255;
 
 struct game{
   int x;
   int y;
-  int internal_id;
-  bool is_steamgame;
-  int steam_id;
-  string path;
+  char* path;
   BITMAP* icon;
 }game[100];
 
@@ -97,8 +96,6 @@ void abort_on_error(const char *message){
 }
 
 void write_settings(){
-    settings[1]=game[1].steam_id;
-    settings[2]=game[1].is_steamgame;
     settings[3]=game[1].x;
 
     ofstream settings_file;
@@ -121,8 +118,6 @@ void read_settings(){
     read>>game[1].path;
     read.close();
 
-    game[1].steam_id=settings[1];
-    game[1].is_steamgame=settings[2];
     game[1].x=settings[3];
 
 }
@@ -131,10 +126,7 @@ void read_settings(){
 void update(){
 
   if(location_clicked(412,612,200,400) && step>9){
-    if(game_focus==2)ShellExecute(NULL, "open", "steam://rungameid/730", NULL, NULL, SW_SHOWDEFAULT);
-    if(game_focus==1)ShellExecute(NULL, "open", "C:\\Program Files (x86)\\Steam\\steam.exe", NULL, NULL, SW_SHOWDEFAULT);
-    if(game_focus==3)ShellExecute(NULL, "open", "steam://rungameid/4000", NULL, NULL, SW_SHOWDEFAULT);
-    if(game_focus==4)ShellExecute(NULL, "open", "steam://rungameid/30", NULL, NULL, SW_SHOWDEFAULT);
+    ShellExecute(NULL, "open", game[game_focus].path, NULL, NULL, SW_SHOWDEFAULT);
 
     step=0;
   }
@@ -167,10 +159,11 @@ void update(){
 void draw(){
     rectfill(buffer,0,0,1024,768,makecol(background_r,background_g,background_b));
     rect(buffer,512,0,512,768,makecol(0,0,0));
-    draw_sprite(buffer,game[1].icon,game[1].x-(game_focus*300),game[1].y);
-    draw_sprite(buffer,game[2].icon,game[2].x-(game_focus*300),game[2].y);
-    draw_sprite(buffer,game[3].icon,game[3].x-(game_focus*300),game[3].y);
-    draw_sprite(buffer,game[4].icon,game[4].x-(game_focus*300),game[4].y);
+    for (int i = 1; i < 5; i++){
+      draw_sprite(buffer,game[i].icon,game[i].x-(game_focus*300),game[i].y);
+    }
+    draw_trans_sprite(buffer,game[5].icon,game[5].x-(game_focus*300),game[5].y);
+     draw_trans_sprite(buffer,game[6].icon,game[6].x-(game_focus*300),game[6].y);
 
     draw_sprite(buffer,cursor,mouse_x,mouse_y);
     draw_sprite(screen,buffer,0,0);
@@ -185,7 +178,7 @@ void draw(){
 void setup(){
     buffer=create_bitmap(1024,768);
 
-
+    set_alpha_blender();
 
 
 
@@ -212,32 +205,42 @@ void setup(){
       abort_on_error("Cannot find image icons/icon_garrysmod.png\nPlease check your files and try again");
   if (!(icon_dayofdefeat = load_bitmap("icons/icon_dayofdefeat.png", NULL)))
       abort_on_error("Cannot find image icons/icon_dayofdefeat.png\nPlease check your files and try again");
+  if (!(icon_mame = load_bitmap("icons/icon_mame.png", NULL)))
+      abort_on_error("Cannot find image icons/icon_mame.png\nPlease check your files and try again");
+  if (!(icon_lol = load_bitmap("icons/icon_lol.png", NULL)))
+      abort_on_error("Cannot find image icons/icon_lol.png\nPlease check your files and try again");
   if (!(cursor = load_bitmap("cursor.png", NULL)))
       abort_on_error("Cannot find image cursor.png\nPlease check your files and try again");
 
     game[1].path="C:\\Program Files (x86)\\Steam\\steam.exe";
-    game[1].is_steamgame=false;
     game[1].icon=icon_steam;
     game[1].y=200;
     game[1].x=712;
 
-    game[2].path="C:\\Program Files (x86)\\Steam\\steam.exe";
-    game[2].is_steamgame=true;
+    game[2].path="steam://rungameid/730";
     game[2].icon=icon_csgo;
     game[2].x=1012;
     game[2].y=200;
 
-    game[3].path="C:\\Program Files (x86)\\Steam\\steam.exe";
-    game[3].is_steamgame=true;
+    game[3].path="steam://rungameid/4000";
     game[3].icon=icon_garrysmod;
     game[3].x=1312;
     game[3].y=200;
 
-    game[4].path="C:\\Program Files (x86)\\Steam\\steam.exe";
-    game[4].is_steamgame=true;
+    game[4].path="steam://rungameid/30";
     game[4].icon=icon_dayofdefeat;
     game[4].x=1612;
     game[4].y=200;
+
+    game[5].path="poop";
+    game[5].icon=icon_mame;
+    game[5].x=1912;
+    game[5].y=200;
+
+    game[6].path="C:\\Riot Games\\League of Legends\\lol.launcher.exe";
+    game[6].icon=icon_lol;
+    game[6].x=1912;
+    game[6].y=200;
 
 
 }
