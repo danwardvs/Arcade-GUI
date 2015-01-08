@@ -10,6 +10,7 @@ BITMAP* cursor;
 BITMAP* icon_steam;
 BITMAP* icon_csgo;
 BITMAP* icon_garrysmod;
+BITMAP* icon_dayofdefeat;
 
 bool close_button_pressed;
 
@@ -21,16 +22,21 @@ volatile int game_time = 0;
 int fps;
 int frames_done;
 int old_time;
-int game_focus;
+int game_focus=1;
 int step;
+
+int background_r=255;
+int background_g=200;
+int background_b=200;
 
 struct game{
   int x;
   int y;
   int internal_id;
-  int is_steamgame;
+  bool is_steamgame;
   int steam_id;
   char* path;
+  BITMAP* icon;
 }game[100];
 
 void ticker(){
@@ -77,31 +83,46 @@ void abort_on_error(const char *message){
 }
 
 void update(){
-  if(key[KEY_C])ShellExecute(NULL, "open", "E:\\Steam Games\\Steam is a piece of shit\\steamapps\\common\\Counter-Strike Global Offensive\\csgo.exe", NULL, NULL, SW_SHOWDEFAULT);
-  if(location_clicked(500,700,200,400))ShellExecute(NULL, "open", "steam://rungameid/730", NULL, NULL, SW_SHOWDEFAULT);
-  if(location_clicked(800,1000,200,400))ShellExecute(NULL, "open", "steam://rungameid/4000", NULL, NULL, SW_SHOWDEFAULT);
 
+  if(location_clicked(412,612,200,400) && step>9){
+    if(game_focus==2)ShellExecute(NULL, "open", "steam://rungameid/730", NULL, NULL, SW_SHOWDEFAULT);
+    if(game_focus==1)ShellExecute(NULL, "open", "C:\\Program Files (x86)\\Steam\\steam.exe", NULL, NULL, SW_SHOWDEFAULT);
+    if(game_focus==3)ShellExecute(NULL, "open", "steam://rungameid/4000", NULL, NULL, SW_SHOWDEFAULT);
+    if(game_focus==4)ShellExecute(NULL, "open", "steam://rungameid/30", NULL, NULL, SW_SHOWDEFAULT);
 
-  if(location_clicked(200,400,200,400))ShellExecute(NULL, "open", "C:\\Program Files (x86)\\Steam\\steam.exe", NULL, NULL, SW_SHOWDEFAULT);
+    step=0;
+  }
   if(location_clicked(0,400,0,SCREEN_H) && step>9){
     step=0;
-    game_focus++;
+    game_focus--;
   }
 
   if(location_clicked(SCREEN_W-400,SCREEN_W,0,SCREEN_H) && step>9){
     step=0;
-    game_focus--;
+    game_focus++;
   }
+  background_r+=random(-1,1);
+  if(background_r>255)background_r=255;
+  if(background_r<200)background_r=200;
+  background_b+=random(-1,1);
+  if(background_b>255)background_b=255;
+  if(background_b<200)background_b=200;
+  background_g+=random(-1,1);
+  if(background_g>255)background_g=255;
+  if(background_g<200)background_g=200;
 
   step++;
 
 }
 
 void draw(){
-    rectfill(buffer,0,0,1024,768,makecol(255,255,255));
-    draw_sprite(buffer,icon_steam,0+(game_focus*200),200);
-    draw_sprite(buffer,icon_csgo,300+(game_focus*200),200);
-    draw_sprite(buffer,icon_garrysmod,600+(game_focus*200),200);
+    rectfill(buffer,0,0,1024,768,makecol(background_r,background_g,background_b));
+    rect(buffer,512,0,512,768,makecol(0,0,0));
+    draw_sprite(buffer,game[1].icon,game[1].x-(game_focus*300),game[1].y);
+    draw_sprite(buffer,game[2].icon,game[2].x-(game_focus*300),game[2].y);
+    draw_sprite(buffer,game[3].icon,game[3].x-(game_focus*300),game[3].y);
+    draw_sprite(buffer,game[4].icon,game[4].x-(game_focus*300),game[4].y);
+
     draw_sprite(buffer,cursor,mouse_x,mouse_y);
     draw_sprite(screen,buffer,0,0);
 }
@@ -114,6 +135,9 @@ void draw(){
 
 void setup(){
     buffer=create_bitmap(1024,768);
+
+
+
 
 
     srand(time(NULL));
@@ -137,8 +161,35 @@ void setup(){
       abort_on_error("Cannot find image icons/icon_csgo.png\nPlease check your files and try again");
   if (!(icon_garrysmod = load_bitmap("icons/icon_garrysmod.png", NULL)))
       abort_on_error("Cannot find image icons/icon_garrysmod.png\nPlease check your files and try again");
+  if (!(icon_dayofdefeat = load_bitmap("icons/icon_dayofdefeat.png", NULL)))
+      abort_on_error("Cannot find image icons/icon_dayofdefeat.png\nPlease check your files and try again");
   if (!(cursor = load_bitmap("cursor.png", NULL)))
       abort_on_error("Cannot find image cursor.png\nPlease check your files and try again");
+
+    game[1].path="C:\\Program Files (x86)\\Steam\\steam.exe";
+    game[1].is_steamgame=false;
+    game[1].icon=icon_steam;
+    game[1].y=200;
+    game[1].x=712;
+
+    game[2].path="C:\\Program Files (x86)\\Steam\\steam.exe";
+    game[2].is_steamgame=true;
+    game[2].icon=icon_csgo;
+    game[2].x=1012;
+    game[2].y=200;
+
+    game[3].path="C:\\Program Files (x86)\\Steam\\steam.exe";
+    game[3].is_steamgame=true;
+    game[3].icon=icon_garrysmod;
+    game[3].x=1312;
+    game[3].y=200;
+
+    game[4].path="C:\\Program Files (x86)\\Steam\\steam.exe";
+    game[4].is_steamgame=true;
+    game[4].icon=icon_dayofdefeat;
+    game[4].x=1612;
+    game[4].y=200;
+
 
 }
 
