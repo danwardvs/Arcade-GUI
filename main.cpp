@@ -113,6 +113,20 @@ void write_settings(){
 
 }
 
+void read_settings(){
+    ifstream read("games/game_1.dat");
+    for (int i = 0; i < 4; i++){
+        read>>settings[i];
+    }
+    read>>game[1].path;
+    read.close();
+
+    game[1].steam_id=settings[1];
+    game[1].is_steamgame=settings[2];
+    game[1].x=settings[3];
+
+}
+
 
 void update(){
 
@@ -144,6 +158,7 @@ void update(){
   if(background_g<200)background_g=200;
 
   if(key[KEY_P])write_settings();
+  if(key[KEY_O])read_settings();
 
   step++;
 
