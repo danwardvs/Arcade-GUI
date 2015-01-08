@@ -1,8 +1,12 @@
 #include<allegro.h>
 #include<alpng.h>
 #include<time.h>
-#include <windows.h>
+#include<windows.h>
 #include<shellapi.h>
+#include<fstream>
+#include<sstream>
+
+using namespace std;
 
 BITMAP* buffer;
 BITMAP* cursor;
@@ -25,6 +29,8 @@ int old_time;
 int game_focus=1;
 int step;
 
+int settings[5];
+
 int background_r=255;
 int background_g=200;
 int background_b=200;
@@ -35,7 +41,7 @@ struct game{
   int internal_id;
   bool is_steamgame;
   int steam_id;
-  char* path;
+  string path;
   BITMAP* icon;
 }game[100];
 
@@ -53,6 +59,14 @@ void close_button_handler(void){
   close_button_pressed = TRUE;
 }
 END_OF_FUNCTION(close_button_handler)
+
+
+//Convert string to int
+int convertStringToInt(string newString){
+  int result;
+  stringstream(newString) >> result;
+  return result;
+}
 
 //Area clicked
 bool location_clicked(int min_x,int max_x,int min_y,int max_y){
@@ -82,6 +96,24 @@ void abort_on_error(const char *message){
 	 exit(-1);
 }
 
+void write_settings(){
+    settings[1]=game[1].steam_id;
+    settings[2]=game[1].is_steamgame;
+    settings[3]=game[1].x;
+
+    ofstream settings_file;
+    settings_file.open("games/game_1.txt");
+
+    for (int i = 0; i < 4; i++){
+        settings_file<<settings[i]<<" ";
+    }
+    settings_file<<game[1].path;
+
+    settings_file.close();
+
+}
+
+
 void update(){
 
   if(location_clicked(412,612,200,400) && step>9){
@@ -110,6 +142,8 @@ void update(){
   background_g+=random(-1,1);
   if(background_g>255)background_g=255;
   if(background_g<200)background_g=200;
+
+  if(key[KEY_P])write_settings();
 
   step++;
 
