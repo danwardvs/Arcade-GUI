@@ -18,6 +18,13 @@ BITMAP* icon_dayofdefeat;
 BITMAP* icon_mame;
 BITMAP* icon_lol;
 
+FONT* f1;
+FONT* f2;
+FONT* f3;
+FONT* f4;
+FONT* f5;
+FONT* arimo_22;
+
 bool close_button_pressed;
 
 // FPS System
@@ -41,6 +48,7 @@ struct game{
   int x;
   int y;
   char* path;
+  char* name;
   BITMAP* icon;
 }game[100];
 
@@ -158,12 +166,14 @@ void update(){
 
 void draw(){
     rectfill(buffer,0,0,1024,768,makecol(background_r,background_g,background_b));
-    rect(buffer,512,0,512,768,makecol(0,0,0));
+    //rect(buffer,512,0,512,768,makecol(0,0,0));
+
+    textout_centre_ex(buffer, arimo_22, game[game_focus].name, 512, 150, makecol(0,0,0), -1);
     for (int i = 1; i < 5; i++){
       draw_sprite(buffer,game[i].icon,game[i].x-(game_focus*300),game[i].y);
     }
     draw_trans_sprite(buffer,game[5].icon,game[5].x-(game_focus*300),game[5].y);
-     draw_trans_sprite(buffer,game[6].icon,game[6].x-(game_focus*300),game[6].y);
+    draw_trans_sprite(buffer,game[6].icon,game[6].x-(game_focus*300),game[6].y);
 
     draw_sprite(buffer,cursor,mouse_x,mouse_y);
     draw_sprite(screen,buffer,0,0);
@@ -212,34 +222,54 @@ void setup(){
   if (!(cursor = load_bitmap("cursor.png", NULL)))
       abort_on_error("Cannot find image cursor.png\nPlease check your files and try again");
 
+    f1 = load_font("arimo_22.pcx", NULL, NULL);
+    f2 = extract_font_range(f1, ' ', 'A'-1);
+    f3 = extract_font_range(f1, 'A', 'Z');
+    f4 = extract_font_range(f1, 'Z'+1, 'z');
+    arimo_22 = merge_fonts(f4, f5 = merge_fonts(f2, f3));
+
+    // Destroy temporary fonts
+    destroy_font(f1);
+    destroy_font(f2);
+    destroy_font(f3);
+    destroy_font(f4);
+    destroy_font(f5);
+
+
     game[1].path="C:\\Program Files (x86)\\Steam\\steam.exe";
+    game[1].name="Steam Client";
     game[1].icon=icon_steam;
     game[1].y=200;
     game[1].x=712;
 
     game[2].path="steam://rungameid/730";
+    game[2].name="Counter-strike: Global Offensive";
     game[2].icon=icon_csgo;
     game[2].x=1012;
     game[2].y=200;
 
     game[3].path="steam://rungameid/4000";
+    game[3].name="Garry's Mod";
     game[3].icon=icon_garrysmod;
     game[3].x=1312;
     game[3].y=200;
 
     game[4].path="steam://rungameid/30";
+    game[4].name="Day of Defeat: Classic";
     game[4].icon=icon_dayofdefeat;
     game[4].x=1612;
     game[4].y=200;
 
     game[5].path="poop";
+    game[5].name="MAME";
     game[5].icon=icon_mame;
     game[5].x=1912;
     game[5].y=200;
 
     game[6].path="C:\\Riot Games\\League of Legends\\lol.launcher.exe";
+    game[6].name="League of Legends";
     game[6].icon=icon_lol;
-    game[6].x=1912;
+    game[6].x=2212;
     game[6].y=200;
 
 
