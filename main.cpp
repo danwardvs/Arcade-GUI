@@ -133,19 +133,21 @@ void read_settings(){
 
 void update(){
 
-  if(location_clicked(412,612,200,400) && step>9){
+  poll_joystick();
+
+  if((location_clicked(412,612,200,400) || joy[0].button[2].b) && step>9){
     ShellExecute(NULL, "open", game[game_focus].path, NULL, NULL, SW_SHOWDEFAULT);
 
     step=0;
   }
-  if(location_clicked(0,400,0,SCREEN_H) && step>9){
+  if((location_clicked(0,400,0,SCREEN_H)|| joy[0].stick[0].axis[0].d1) && step>9){
     step=0;
-    game_focus--;
+    if(game_focus>1)game_focus--;
   }
 
-  if(location_clicked(SCREEN_W-400,SCREEN_W,0,SCREEN_H) && step>9){
+  if((location_clicked(SCREEN_W-400,SCREEN_W,0,SCREEN_H)|| joy[0].stick[0].axis[0].d2) && step>9){
     step=0;
-    game_focus++;
+    if(game_focus<6)game_focus++;
   }
   background_r+=random(-1,1);
   if(background_r>255)background_r=255;
@@ -161,6 +163,8 @@ void update(){
   if(key[KEY_O])read_settings();
 
   step++;
+
+
 
 }
 
@@ -288,9 +292,10 @@ int main(){
   install_keyboard();
   install_mouse();
   set_color_depth(32);
+  install_joystick(JOY_TYPE_AUTODETECT);
 
 
-  set_gfx_mode(GFX_AUTODETECT_WINDOWED,1024,768, 0, 0);
+  set_gfx_mode(GFX_AUTODETECT,1024,768, 0, 0);
   install_sound(DIGI_AUTODETECT,MIDI_AUTODETECT,".");
 
 
