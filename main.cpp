@@ -46,7 +46,7 @@ volatile int ticks = 0;
 const int updates_per_second = 60;
 volatile int game_time = 0;
 
-int GAME_STATE=JOYSTICK;
+int GAME_STATE=MENU;
 
 int fps;
 int frames_done;
@@ -361,7 +361,7 @@ int main(){
   install_joystick(JOY_TYPE_AUTODETECT);
 
 
-  set_gfx_mode(GFX_AUTODETECT,1024,768, 0, 0);
+  set_gfx_mode(GFX_AUTODETECT_WINDOWED,1024,768, 0, 0);
   install_sound(DIGI_AUTODETECT,MIDI_AUTODETECT,".");
 
 
