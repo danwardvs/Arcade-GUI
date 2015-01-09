@@ -8,6 +8,9 @@
 
 using namespace std;
 
+#define MENU 0
+#define JOYSTICK 1
+
 BITMAP* buffer;
 BITMAP* cursor;
 
@@ -31,6 +34,8 @@ bool close_button_pressed;
 volatile int ticks = 0;
 const int updates_per_second = 60;
 volatile int game_time = 0;
+
+int GAME_STATE=MENU;
 
 int fps;
 int frames_done;
@@ -134,36 +139,35 @@ void read_settings(){
 void update(){
 
   poll_joystick();
+  if(GAME_STATE==MENU){
+    if((location_clicked(412,612,200,400) || joy[0].button[2].b) && step>9){
+      ShellExecute(NULL, "open", game[game_focus].path, NULL, NULL, SW_SHOWDEFAULT);
+      step=0;
+    }
+    if((location_clicked(0,400,0,SCREEN_H)|| joy[0].stick[0].axis[0].d1) && step>9){
+      step=0;
+      if(game_focus>1)game_focus--;
+    }
 
-  if((location_clicked(412,612,200,400) || joy[0].button[2].b) && step>9){
-    ShellExecute(NULL, "open", game[game_focus].path, NULL, NULL, SW_SHOWDEFAULT);
+    if((location_clicked(SCREEN_W-400,SCREEN_W,0,SCREEN_H)|| joy[0].stick[0].axis[0].d2) && step>9){
+      step=0;
+      if(game_focus<6)game_focus++;
+    }
+    background_r+=random(-1,1);
+    if(background_r>255)background_r=255;
+    if(background_r<200)background_r=200;
+    background_b+=random(-1,1);
+    if(background_b>255)background_b=255;
+    if(background_b<200)background_b=200;
+    background_g+=random(-1,1);
+    if(background_g>255)background_g=255;
+    if(background_g<200)background_g=200;
 
-    step=0;
+    if(key[KEY_P])write_settings();
+    if(key[KEY_O])read_settings();
+
+    step++;
   }
-  if((location_clicked(0,400,0,SCREEN_H)|| joy[0].stick[0].axis[0].d1) && step>9){
-    step=0;
-    if(game_focus>1)game_focus--;
-  }
-
-  if((location_clicked(SCREEN_W-400,SCREEN_W,0,SCREEN_H)|| joy[0].stick[0].axis[0].d2) && step>9){
-    step=0;
-    if(game_focus<6)game_focus++;
-  }
-  background_r+=random(-1,1);
-  if(background_r>255)background_r=255;
-  if(background_r<200)background_r=200;
-  background_b+=random(-1,1);
-  if(background_b>255)background_b=255;
-  if(background_b<200)background_b=200;
-  background_g+=random(-1,1);
-  if(background_g>255)background_g=255;
-  if(background_g<200)background_g=200;
-
-  if(key[KEY_P])write_settings();
-  if(key[KEY_O])read_settings();
-
-  step++;
-
 
 
 }
@@ -171,16 +175,17 @@ void update(){
 void draw(){
     rectfill(buffer,0,0,1024,768,makecol(background_r,background_g,background_b));
     //rect(buffer,512,0,512,768,makecol(0,0,0));
+    if(GAME_STATE==MENU){
+      textout_centre_ex(buffer, arimo_22, game[game_focus].name, 512, 150, makecol(0,0,0), -1);
+      for (int i = 1; i < 5; i++){
+        draw_sprite(buffer,game[i].icon,game[i].x-(game_focus*300),game[i].y);
+      }
+      draw_trans_sprite(buffer,game[5].icon,game[5].x-(game_focus*300),game[5].y);
+      draw_trans_sprite(buffer,game[6].icon,game[6].x-(game_focus*300),game[6].y);
 
-    textout_centre_ex(buffer, arimo_22, game[game_focus].name, 512, 150, makecol(0,0,0), -1);
-    for (int i = 1; i < 5; i++){
-      draw_sprite(buffer,game[i].icon,game[i].x-(game_focus*300),game[i].y);
+      draw_sprite(buffer,cursor,mouse_x,mouse_y);
+      draw_sprite(screen,buffer,0,0);
     }
-    draw_trans_sprite(buffer,game[5].icon,game[5].x-(game_focus*300),game[5].y);
-    draw_trans_sprite(buffer,game[6].icon,game[6].x-(game_focus*300),game[6].y);
-
-    draw_sprite(buffer,cursor,mouse_x,mouse_y);
-    draw_sprite(screen,buffer,0,0);
 }
 
 
@@ -295,7 +300,7 @@ int main(){
   install_joystick(JOY_TYPE_AUTODETECT);
 
 
-  set_gfx_mode(GFX_AUTODETECT,1024,768, 0, 0);
+  set_gfx_mode(GFX_AUTODETECT_WINDOWED,1024,768, 0, 0);
   install_sound(DIGI_AUTODETECT,MIDI_AUTODETECT,".");
 
 
