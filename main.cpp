@@ -199,14 +199,14 @@ void draw(){
     }
     if(GAME_STATE==JOYSTICK){
       draw_sprite(buffer,joystick_background,0,0);
-      if(joy[0].button[1].b)draw_sprite(buffer,joystick_button_1,435,344);
-      if(joy[0].button[2].b)draw_sprite(buffer,joystick_button_2,543,328);
-      if(joy[0].button[3].b)draw_sprite(buffer,joystick_button_3,648,341);
-      if(joy[0].button[4].b)draw_sprite(buffer,joystick_button_4,432,277);
-      if(joy[0].button[5].b)draw_sprite(buffer,joystick_button_5,533,255);
-      if(joy[0].button[6].b)draw_sprite(buffer,joystick_button_6,635,276);
-      if(joy[0].button[7].b)draw_sprite(buffer,joystick_button_7,694,217);
-      if(joy[0].button[8].b)draw_sprite(buffer,joystick_button_8,764,222);
+      if(joy[0].button[0].b)draw_sprite(buffer,joystick_button_1,435,344);
+      if(joy[0].button[1].b)draw_sprite(buffer,joystick_button_2,543,328);
+      if(joy[0].button[2].b)draw_sprite(buffer,joystick_button_3,648,341);
+      if(joy[0].button[3].b)draw_sprite(buffer,joystick_button_4,432,277);
+      if(joy[0].button[4].b)draw_sprite(buffer,joystick_button_5,533,255);
+      if(joy[0].button[5].b)draw_sprite(buffer,joystick_button_6,635,276);
+      if(joy[0].button[10].b)draw_sprite(buffer,joystick_button_7,694,217);
+      if(joy[0].button[11].b)draw_sprite(buffer,joystick_button_8,764,222);
 
     }
     draw_sprite(buffer,cursor,mouse_x,mouse_y);
@@ -361,7 +361,7 @@ int main(){
   install_joystick(JOY_TYPE_AUTODETECT);
 
 
-  set_gfx_mode(GFX_AUTODETECT_WINDOWED,1024,768, 0, 0);
+  set_gfx_mode(GFX_AUTODETECT,1024,768, 0, 0);
   install_sound(DIGI_AUTODETECT,MIDI_AUTODETECT,".");
 
 
