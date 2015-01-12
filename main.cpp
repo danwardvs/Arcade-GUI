@@ -17,6 +17,7 @@ using namespace std;
 // Images
 BITMAP* buffer;
 BITMAP* cursor;
+BITMAP* overlay;
 
 BITMAP* icon[20];
 
@@ -67,13 +68,18 @@ int GAME_STATE=MENU;
 int fps;
 int frames_done;
 int old_time;
-int game_focus=1;
+int game_focus = 1;
 int step;
 
 int settings[5];
 
 // Scale of icon in focus
 const double icon_scale = 150;
+
+// Transition of icons
+double icon_transition;
+const double icon_transition_speed = 20;
+
 char* read_data;
 
 // Background variables
@@ -165,13 +171,10 @@ void write_settings(){
 void read_settings(){
   ifstream read("games/game_1.dat");
 
-    read>>read_data;
+  read>>read_data;
 
- // game[1].path=string(read_data);
-
+  // game[1].path=string(read_data);
   read.close();
-
-
 }
 
 // Setup colours for background
@@ -231,23 +234,34 @@ void update(){
   // Menu
   if(GAME_STATE==MENU){
     // Joystick APP
-    if((location_clicked(412,612,200,400) || joy[0].button[2].b) && step>9){
+    if((location_clicked(412,612,200,400) || joy[0].button[2].b) && step > 9 && icon_transition == 0){
       ShellExecute(NULL, "open", game[game_focus].path, NULL, NULL, SW_SHOWDEFAULT);
-      step=0;
-      if(game_focus==7)
+      step = 0;
+      if(game_focus == 7)
         GAME_STATE=JOYSTICK;
     }
     // Scroll Left
-    if((location_clicked(0,400,0,SCREEN_H)|| joy[0].stick[0].axis[0].d1) && step>9){
-      step=0;
-      if(game_focus>1)
-        game_focus--;
+    if((location_clicked(0,400,0,SCREEN_H)|| joy[0].stick[0].axis[0].d1) && step > 9 && icon_transition == 0 && game_focus > 1){
+      game_focus--;
+      icon_transition = -300;
+      step = 0;
     }
     // Scroll Right
-    if((location_clicked(SCREEN_W-400,SCREEN_W,0,SCREEN_H)|| joy[0].stick[0].axis[0].d2) && step>9){
-      step=0;
-      if(game_focus<7)game_focus++;
+    if((location_clicked(SCREEN_W-400,SCREEN_W,0,SCREEN_H)|| joy[0].stick[0].axis[0].d2) && step>9 && icon_transition == 0 && game_focus < 7){
+      game_focus++;
+      icon_transition = 300;
+      step = 0;
     }
+
+    // Scroll
+    if( icon_transition > icon_transition_speed)
+      icon_transition -= icon_transition_speed;
+    else if( icon_transition > 0)
+      icon_transition = 0;
+    else if( icon_transition < 0)
+      icon_transition += icon_transition_speed;
+    else if( icon_transition < icon_transition_speed)
+      icon_transition = 0;
 
     // Change background colour, with speed
     change_colours();
@@ -267,17 +281,20 @@ void update(){
       ship_x--;
     else if(joy[0].stick[0].axis[0].d2 && ship_x < 771)
       ship_x++;
+
+    // Change background colour, with speed
+    change_colours();
   }
 }
 
 // Draw to screen
 void draw(){
-  // Background
-  rectfill(buffer,0,0,1024,768,makecol(background_r,background_g,background_b));
-  //rect(buffer,512,0,512,768,makecol(0,0,0));
-
   // Menu
   if(GAME_STATE == MENU){
+    // Background
+    rectfill(buffer,0,0,1024,768,makecol(background_r,background_g,background_b));
+    draw_trans_sprite( buffer, overlay, 0, 0);
+
     // Title
     textout_centre_ex( buffer, arimo_22, game[game_focus].name, 512, 100, makecol(0,0,0), -1);
 
@@ -293,13 +310,19 @@ void draw(){
       // Stretches icon it if its in focus
       stretch_sprite( newIcon, icon[i], 0, 0, newIcon -> w, newIcon -> h);
       // Draw it with transparency
-      draw_trans_sprite(buffer, newIcon, game[i].x - (game_focus * 300) - new_scale/2, game[i].y - new_scale/2);
+      draw_trans_sprite(buffer, newIcon, game[i].x - ((game_focus * 300) - icon_transition) - new_scale/2, game[i].y - new_scale/2);
     }
   }
   // Joystick APP
   if(GAME_STATE == JOYSTICK){
     // Background
-    draw_sprite( buffer, joystick_background2, 0, 0);
+    rectfill(buffer,0,0,1024,768,makecol(background_r,background_g,background_b));
+    // 2 Overlays for added effect
+    draw_trans_sprite( buffer, overlay, 0, 0);
+    draw_trans_sprite( buffer, overlay, 0, 0);
+
+    // Background
+    draw_trans_sprite( buffer, joystick_background2, 0, 0);
     draw_trans_sprite( buffer, joystick_background, 0, 0);
 
     // Buttons
@@ -394,6 +417,9 @@ void setup(){
 
   if (!(cursor = load_bitmap("cursor.png", NULL)))
     abort_on_error("Cannot find image cursor.png\nPlease check your files and try again");
+  if (!(overlay = load_bitmap("overlay.png", NULL)))
+    abort_on_error("Cannot find image overlay.png\nPlease check your files and try again");
+
 
   // Joystick
   if (!(joystick_background= load_bitmap("joystick/joystick_background.png", NULL)))
