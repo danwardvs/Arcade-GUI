@@ -60,9 +60,17 @@ int step;
 
 int settings[5];
 
-int background_r=200;
-int background_g=200;
-int background_b=255;
+// Background variables
+double background_r, background_g, background_b = 0;
+bool background_r_up, background_g_up, background_b_up = true;
+double background_speed;
+
+enum background_colours{
+  VIBRANT,
+  GREYSCALE,
+  PASTEL,
+  BALANCED
+};
 
 // Game icons
 struct game{
@@ -151,6 +159,55 @@ void read_settings(){
   game[1].x=settings[3];
 }
 
+// Setup colours for background
+// For more vibrant colours, space out numbers farther e.g. 1, 125, 254
+// For more pastel colours, keep numbers close together e.g. 1, 10, 20
+void setup_colours( int preset_name, double newSpeed){
+  if( preset_name == VIBRANT){
+    background_r = 1.0;
+    background_g = 166.0;
+    background_b = 77.0;
+    background_r_up, background_g_up = true;
+    background_b_up = false;
+  }
+  else if( preset_name == GREYSCALE){
+    background_r = 1.0;
+    background_g = 1.0;
+    background_b = 1.0;
+    background_r_up, background_g_up, background_b_up = true;
+  }
+  else if( preset_name == PASTEL){
+    background_r = 1.0;
+    background_g = 40.0;
+    background_b = 80.0;
+    background_r_up, background_g_up, background_b_up = true;
+  }
+  else if( preset_name == BALANCED){
+    background_r = 1.0;
+    background_g = 100.0;
+    background_b = 200.0;
+    background_r_up, background_g_up, background_b_up = true;
+  }
+  background_speed = newSpeed;
+}
+
+// Change colours
+void change_colours(){
+  // If colour value increase, increase by 1, else decrease by 1
+  // When increasing, background_r_up = true or 1, *2 -1 still equals 1
+  // When increasing, background_r_up = false or 0, *2 -1 still equals -1
+  background_r += (background_r_up *2 -1) * background_speed;
+  background_g += (background_g_up *2 -1) * background_speed;
+  background_b += (background_b_up *2 -1) * background_speed;
+
+  // Start decreasing once it reaches the end
+  if(background_r >= 255 || background_r <= 0)
+    background_r_up = !background_r_up;
+  if(background_g >= 255 || background_g <= 0)
+    background_g_up = !background_g_up;
+  if(background_b >= 255 || background_b <= 0)
+    background_b_up = !background_b_up;
+}
 
 // Update
 void update(){
@@ -177,22 +234,8 @@ void update(){
       if(game_focus<7)game_focus++;
     }
 
-    // Change background colour
-    background_r+=random(-1,1);
-    if(background_r>255)
-      background_r=255;
-    if(background_r<200)
-      background_r=200;
-    background_b+=random(-1,1);
-    if(background_b>255)
-      background_b=255;
-    if(background_b<200)
-      background_b=200;
-    background_g+=random(-1,1);
-    if(background_g>255)
-      background_g=255;
-    if(background_g<200)
-      background_g=200;
+    // Change background colour, with speed
+    change_colours();
 
     // Read and write settings
     if(key[KEY_P])
@@ -212,17 +255,14 @@ void draw(){
   //rect(buffer,512,0,512,768,makecol(0,0,0));
 
   // Menu
-  if(GAME_STATE==MENU){
-    textout_centre_ex(buffer, arimo_22, game[game_focus].name, 512, 150, makecol(0,0,0), -1);
-    for (int i = 1; i < 5; i++){
-      draw_sprite(buffer,game[i].icon,game[i].x-(game_focus*300),game[i].y);
+  if(GAME_STATE == MENU){
+    textout_centre_ex( buffer, arimo_22, game[game_focus].name, 512, 150, makecol(0,0,0), -1);
+    for (int i = 1; i <= 7; i++){
+      draw_trans_sprite( buffer, game[i].icon, game[i].x - (game_focus*300), game[i].y);
     }
-    draw_trans_sprite(buffer,game[5].icon,game[5].x-(game_focus*300),game[5].y);
-    draw_trans_sprite(buffer,game[6].icon,game[6].x-(game_focus*300),game[6].y);
-    draw_sprite(buffer,game[7].icon,game[7].x-(game_focus*300),game[7].y);
   }
   // Joystick APP
-  if(GAME_STATE==JOYSTICK){
+  if(GAME_STATE == JOYSTICK){
     draw_sprite(buffer,joystick_background,0,0);
     if(joy[0].button[0].b)
       draw_sprite(buffer,joystick_button_1,435,344);
@@ -255,6 +295,9 @@ void setup(){
 
   // Init random number generator
   srand(time(NULL));
+
+  // Setup colours, options are VIBRANT, GREYSCALE, PASTEL, BALANCED and a speed (1 is default)
+  setup_colours( BALANCED, 0.2);
 
   // Setup for FPS system
   LOCK_VARIABLE(ticks);
@@ -393,18 +436,16 @@ int main(){
     }
     while(ticks > 0){
       int old_ticks = ticks;
-
       update();
-
       ticks--;
       if(old_ticks <= ticks){
-          break;
+        break;
       }
     }
     if(game_time - old_time >= 10){
-        fps = frames_done;
-        frames_done = 0;
-        old_time = game_time;
+      fps = frames_done;
+      frames_done = 0;
+      old_time = game_time;
     }
     draw();
   }
