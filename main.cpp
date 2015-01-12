@@ -307,21 +307,21 @@ void draw(){
     if(joy[0].button[11].b)
       draw_sprite(buffer,joystick_button_8,764,222);
 
-    if(key[KEY_UP])
+    if(joy[0].stick[0].axis[1].d1)
       draw_sprite(buffer,joystick_up,207,215);
-    if(key[KEY_DOWN])
+    if(joy[0].stick[0].axis[1].d2)
       draw_sprite(buffer,joystick_down,207,215);
-    if(key[KEY_LEFT])
+    if(joy[0].stick[0].axis[0].d1)
       draw_sprite(buffer,joystick_left,207,215);
-    if(key[KEY_RIGHT])
+    if(joy[0].stick[0].axis[0].d2)
       draw_sprite(buffer,joystick_right,207,215);
-    if(key[KEY_RIGHT] && key[KEY_UP])
+    if(joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d1)
       draw_sprite(buffer,joystick_right_up,207,215);
-    if(key[KEY_RIGHT] && key[KEY_DOWN])
+    if(joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d2)
       draw_sprite(buffer,joystick_right_down,207,215);
-    if(key[KEY_LEFT] && key[KEY_UP])
+    if(joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d1)
       draw_sprite(buffer,joystick_left_up,207,215);
-    if(key[KEY_LEFT] && key[KEY_DOWN])
+    if(joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d2)
       draw_sprite(buffer,joystick_left_down,207,215);
   }
   draw_sprite(buffer,cursor,mouse_x,mouse_y);
