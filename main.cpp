@@ -39,6 +39,12 @@ BITMAP* joystick_button_6;
 BITMAP* joystick_button_7;
 BITMAP* joystick_button_8;
 
+
+// Minigame
+BITMAP* ship;
+BITMAP* joystick_background2;
+int ship_x, ship_y;
+
 // Fonts
 FONT* f1;
 FONT* f2;
@@ -66,15 +72,9 @@ int step;
 
 int settings[5];
 
-<<<<<<< HEAD
 // Scale of icon in focus
 const double icon_scale = 150;
-=======
 char* read_data;
-
-// Scale of icon
-const double icon_scale = 100;
->>>>>>> origin/master
 
 // Background variables
 double background_r, background_g, background_b = 0;
@@ -150,11 +150,7 @@ void abort_on_error(const char *message){
 
 // Write to settings file
 void write_settings(){
-<<<<<<< HEAD
   settings[3] = game[1].x;
-=======
-
->>>>>>> origin/master
 
   ofstream settings_file;
   settings_file.open("games/game_1.txt");
@@ -186,26 +182,26 @@ void setup_colours( int preset_name, double newSpeed){
     background_r = 1.0;
     background_g = 166.0;
     background_b = 77.0;
-    background_r_up, background_g_up = true;
+    background_r_up = background_g_up = true;
     background_b_up = false;
   }
   else if( preset_name == GREYSCALE){
     background_r = 1.0;
     background_g = 1.0;
     background_b = 1.0;
-    background_r_up, background_g_up, background_b_up = true;
+    background_r_up = background_g_up = background_b_up = true;
   }
   else if( preset_name == PASTEL){
     background_r = 1.0;
     background_g = 40.0;
     background_b = 80.0;
-    background_r_up, background_g_up, background_b_up = true;
+    background_r_up = background_g_up = background_b_up = true;
   }
   else if( preset_name == BALANCED){
     background_r = 1.0;
     background_g = 100.0;
     background_b = 200.0;
-    background_r_up, background_g_up, background_b_up = true;
+    background_r_up = background_g_up = background_b_up = true;
   }
   background_speed = newSpeed;
 }
@@ -265,6 +261,13 @@ void update(){
     // Step counter
     step++;
   }
+  if(GAME_STATE == JOYSTICK){
+    // Minigame
+    if(joy[0].stick[0].axis[0].d1 && ship_x > 209)
+      ship_x--;
+    else if(joy[0].stick[0].axis[0].d2 && ship_x < 771)
+      ship_x++;
+  }
 }
 
 // Draw to screen
@@ -278,79 +281,65 @@ void draw(){
     // Title
     textout_centre_ex( buffer, arimo_22, game[game_focus].name, 512, 100, makecol(0,0,0), -1);
 
-
-      for (int i = 1; i < 8; i++){
-        draw_trans_sprite( buffer, icon[i], game[i].x-(game_focus*300), game[i].y);
-      }
-
-    // Temporary icon, allows minipulation
     // Draw icon (stretched if needed)
-<<<<<<< HEAD
     for (int i = 1; i <= 7; i++){
       // Initial scale is original
-=======
-    /*for (int i = 1; i <= 7; i++){
-      // Temporary icon, allows minipulation
-      BITMAP* newIcon = create_bitmap( 200, 200);
-      draw_trans_sprite( newIcon, game[i].icon, 0, 0);
->>>>>>> origin/master
       int new_scale = 0;
       // If its the current icon, enlarge it
-     // if( i == game_focus)
+      if( i == game_focus)
         new_scale = icon_scale;
-<<<<<<< HEAD
       // Temporary icon, allows manipulation. Makes it the size of the original icon with scaling if needed
-      BITMAP* newIcon = create_bitmap( game[i].icon -> w + new_scale, game[i].icon -> h + new_scale);
+      BITMAP* newIcon = create_bitmap( icon[i] -> w + new_scale, icon[i] -> h + new_scale);
       // Stretches icon it if its in focus
-      stretch_sprite( newIcon, game[i].icon, 0, 0, newIcon -> w, newIcon -> h);
+      stretch_sprite( newIcon, icon[i], 0, 0, newIcon -> w, newIcon -> h);
       // Draw it with transparency
       draw_trans_sprite(buffer, newIcon, game[i].x - (game_focus * 300) - new_scale/2, game[i].y - new_scale/2);
     }
-=======
-      // Draw it
-      stretch_sprite(buffer, newIcon,
-        game[i].x - (game_focus * 300) - new_scale/2,
-        game[i].y - new_scale/2,
-        newIcon -> w + new_scale, newIcon -> h + new_scale);
-    }*/
->>>>>>> origin/master
   }
   // Joystick APP
   if(GAME_STATE == JOYSTICK){
-    draw_sprite(buffer,joystick_background,0,0);
+    // Background
+    draw_sprite( buffer, joystick_background2, 0, 0);
+    draw_trans_sprite( buffer, joystick_background, 0, 0);
+
+    // Buttons
     if(joy[0].button[0].b)
       draw_sprite(buffer,joystick_button_1,435,344);
-    if(joy[0].button[1].b)
+    else if(joy[0].button[1].b)
       draw_sprite(buffer,joystick_button_2,543,328);
-    if(joy[0].button[2].b)
+    else if(joy[0].button[2].b)
       draw_sprite(buffer,joystick_button_3,648,341);
-    if(joy[0].button[3].b)
+    else if(joy[0].button[3].b)
       draw_sprite(buffer,joystick_button_4,432,277);
-    if(joy[0].button[4].b)
+    else if(joy[0].button[4].b)
       draw_sprite(buffer,joystick_button_5,533,255);
-    if(joy[0].button[5].b)
+    else if(joy[0].button[5].b)
       draw_sprite(buffer,joystick_button_6,635,276);
-    if(joy[0].button[10].b)
+    else if(joy[0].button[10].b)
       draw_sprite(buffer,joystick_button_7,694,217);
-    if(joy[0].button[11].b)
+    else if(joy[0].button[11].b)
       draw_sprite(buffer,joystick_button_8,764,222);
 
-    if(key[KEY_UP])
+    // Stick
+    if(joy[0].stick[0].axis[1].d1)
       draw_sprite(buffer,joystick_up,207,215);
-    if(key[KEY_DOWN])
+    else if(joy[0].stick[0].axis[1].d2)
       draw_sprite(buffer,joystick_down,207,215);
-    if(key[KEY_LEFT])
+    else if(joy[0].stick[0].axis[0].d1)
       draw_sprite(buffer,joystick_left,207,215);
-    if(key[KEY_RIGHT])
+    else if(joy[0].stick[0].axis[0].d2)
       draw_sprite(buffer,joystick_right,207,215);
-    if(key[KEY_RIGHT] && key[KEY_UP])
+    else if(joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d1)
       draw_sprite(buffer,joystick_right_up,207,215);
-    if(key[KEY_RIGHT] && key[KEY_DOWN])
+    else if(joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d2)
       draw_sprite(buffer,joystick_right_down,207,215);
-    if(key[KEY_LEFT] && key[KEY_UP])
+    else if(joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d1)
       draw_sprite(buffer,joystick_left_up,207,215);
-    if(key[KEY_LEFT] && key[KEY_DOWN])
+    else if(joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d2)
       draw_sprite(buffer,joystick_left_down,207,215);
+
+    // Minigame
+    draw_trans_sprite( buffer, ship, ship_x, ship_y);
   }
   draw_sprite(buffer,cursor,mouse_x,mouse_y);
   draw_sprite(screen,buffer,0,0);
@@ -392,6 +381,10 @@ void setup(){
   game[5].icon="icon_mame";
   game[6].icon="icon_lol";
   game[7].icon="icon_joystick";
+
+  // Minigame
+  ship_x = 477;
+  ship_y = 165;
 
   for (int i = 1; i < 8; i++){
     if (!( icon[i] = load_bitmap((string("icons/") + game[i].icon.c_str() + string(".png")).c_str(), NULL)))
@@ -439,6 +432,10 @@ void setup(){
   if (!(joystick_right_down = load_bitmap("joystick/joystick_right_down.png", NULL)))
     abort_on_error("Cannot find image joystick/joystick_right_down.png\nPlease check your files and try again");
 
+  if (!(joystick_background2 = load_bitmap("joystick/background.png", NULL)))
+    abort_on_error("Cannot find image joystick/background.png\nPlease check your files and try again");
+  if (!(ship = load_bitmap("joystick/ship.png", NULL)))
+    abort_on_error("Cannot find image joystick/ship.png\nPlease check your files and try again");
 
   // Load fonts
   f1 = load_font("arimo_22.pcx", NULL, NULL);
@@ -456,11 +453,6 @@ void setup(){
 
   game[1].path="C:\\Program Files (x86)\\Steam\\steam.exe";
   game[1].name="Steam Client";
-<<<<<<< HEAD
-  game[1].icon=icon_steam;
-=======
-  game[1].y=200;
->>>>>>> origin/master
   game[1].x=712;
   game[1].y=300;
 
