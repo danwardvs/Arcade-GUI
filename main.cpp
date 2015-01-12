@@ -23,16 +23,6 @@ BITMAP* icon_mame;
 BITMAP* icon_lol;
 BITMAP* icon_joystick;
 
-BITMAP* joystick_background;
-BITMAP* joystick_button_1;
-BITMAP* joystick_button_2;
-BITMAP* joystick_button_3;
-BITMAP* joystick_button_4;
-BITMAP* joystick_button_5;
-BITMAP* joystick_button_6;
-BITMAP* joystick_button_7;
-BITMAP* joystick_button_8;
-
 BITMAP* joystick_right;
 BITMAP* joystick_right_up;
 BITMAP* joystick_right_down;
@@ -42,6 +32,15 @@ BITMAP* joystick_left_up;
 BITMAP* joystick_left_down;
 BITMAP* joystick_down;
 
+BITMAP* joystick_background;
+BITMAP* joystick_button_1;
+BITMAP* joystick_button_2;
+BITMAP* joystick_button_3;
+BITMAP* joystick_button_4;
+BITMAP* joystick_button_5;
+BITMAP* joystick_button_6;
+BITMAP* joystick_button_7;
+BITMAP* joystick_button_8;
 
 // Fonts
 FONT* f1;
@@ -380,28 +379,20 @@ void setup(){
 
   if (!(joystick_up = load_bitmap("joystick/joystick_up.png", NULL)))
     abort_on_error("Cannot find image joystick/joystick_up.png\nPlease check your files and try again");
-
-      if (!(joystick_down = load_bitmap("joystick/joystick_down.png", NULL)))
+  if (!(joystick_down = load_bitmap("joystick/joystick_down.png", NULL)))
     abort_on_error("Cannot find image joystick/joystick_down.png\nPlease check your files and try again");
-
-      if (!(joystick_right = load_bitmap("joystick/joystick_right.png", NULL)))
+  if (!(joystick_right = load_bitmap("joystick/joystick_right.png", NULL)))
     abort_on_error("Cannot find image joystick/joystick_right.png\nPlease check your files and try again");
-
-      if (!(joystick_left = load_bitmap("joystick/joystick_left.png", NULL)))
+  if (!(joystick_left = load_bitmap("joystick/joystick_left.png", NULL)))
     abort_on_error("Cannot find image joystick/joystick_left.png\nPlease check your files and try again");
-
-      if (!(joystick_left_up = load_bitmap("joystick/joystick_left_up.png", NULL)))
+  if (!(joystick_left_up = load_bitmap("joystick/joystick_left_up.png", NULL)))
     abort_on_error("Cannot find image joystick/joystick_left_up.png\nPlease check your files and try again");
-
-      if (!(joystick_left_down = load_bitmap("joystick/joystick_left_down.png", NULL)))
+  if (!(joystick_left_down = load_bitmap("joystick/joystick_left_down.png", NULL)))
     abort_on_error("Cannot find image joystick/joystick_left_down.png\nPlease check your files and try again");
-
-      if (!(joystick_right_up = load_bitmap("joystick/joystick_right_up.png", NULL)))
+  if (!(joystick_right_up = load_bitmap("joystick/joystick_right_up.png", NULL)))
     abort_on_error("Cannot find image joystick/joystick_right_up.png\nPlease check your files and try again");
-
-      if (!(joystick_right_down = load_bitmap("joystick/joystick_right_down.png", NULL)))
+  if (!(joystick_right_down = load_bitmap("joystick/joystick_right_down.png", NULL)))
     abort_on_error("Cannot find image joystick/joystick_right_down.png\nPlease check your files and try again");
-
 
 
   // Load fonts
