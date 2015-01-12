@@ -8,8 +8,9 @@
 	<fstream>
 	<sstream>
 
-<<<<<<< HEAD
-1421029894 source:e:\allans programming\games indev\arcade-gui\main.cpp
+1421028275 D
+
+1421100392 source:e:\allans programming\games indev\arcade-gui\main.cpp
 	<allegro.h>
 	<alpng.h>
 	<time.h>
@@ -18,5 +19,7 @@
 	<fstream>
 	<sstream>
 
-=======
->>>>>>> origin/master
+1421029894 
+
+1421029894 gin/master
+

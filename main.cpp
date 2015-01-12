@@ -69,8 +69,8 @@ int step;
 
 int settings[5];
 
-// Scale of icon
-const double icon_scale = 100;
+// Scale of icon in focus
+const double icon_scale = 150;
 
 // Background variables
 double background_r, background_g, background_b = 0;
@@ -146,7 +146,7 @@ void abort_on_error(const char *message){
 
 // Write to settings file
 void write_settings(){
-  settings[3]=game[1].x;
+  settings[3] = game[1].x;
 
   ofstream settings_file;
   settings_file.open("games/game_1.txt");
@@ -273,18 +273,17 @@ void draw(){
 
     // Draw icon (stretched if needed)
     for (int i = 1; i <= 7; i++){
-      // Temporary icon, allows minipulation
-      BITMAP* newIcon = create_bitmap( 200, 200);
-      draw_trans_sprite( newIcon, game[i].icon, 0, 0);
+      // Initial scale is original
       int new_scale = 0;
       // If its the current icon, enlarge it
       if( i == game_focus)
         new_scale = icon_scale;
-      // Draw it
-      stretch_sprite(buffer, newIcon,
-        game[i].x - (game_focus * 300) - new_scale/2,
-        game[i].y - new_scale/2,
-        newIcon -> w + new_scale, newIcon -> h + new_scale);
+      // Temporary icon, allows manipulation. Makes it the size of the original icon with scaling if needed
+      BITMAP* newIcon = create_bitmap( game[i].icon -> w + new_scale, game[i].icon -> h + new_scale);
+      // Stretches icon it if its in focus
+      stretch_sprite( newIcon, game[i].icon, 0, 0, newIcon -> w, newIcon -> h);
+      // Draw it with transparency
+      draw_trans_sprite(buffer, newIcon, game[i].x - (game_focus * 300) - new_scale/2, game[i].y - new_scale/2);
     }
   }
   // Joystick APP
@@ -307,21 +306,21 @@ void draw(){
     if(joy[0].button[11].b)
       draw_sprite(buffer,joystick_button_8,764,222);
 
-    if(joy[0].stick[0].axis[1].d1)
+    if(key[KEY_UP])
       draw_sprite(buffer,joystick_up,207,215);
-    if(joy[0].stick[0].axis[1].d2)
+    if(key[KEY_DOWN])
       draw_sprite(buffer,joystick_down,207,215);
-    if(joy[0].stick[0].axis[0].d1)
+    if(key[KEY_LEFT])
       draw_sprite(buffer,joystick_left,207,215);
-    if(joy[0].stick[0].axis[0].d2)
+    if(key[KEY_RIGHT])
       draw_sprite(buffer,joystick_right,207,215);
-    if(joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d1)
+    if(key[KEY_RIGHT] && key[KEY_UP])
       draw_sprite(buffer,joystick_right_up,207,215);
-    if(joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d2)
+    if(key[KEY_RIGHT] && key[KEY_DOWN])
       draw_sprite(buffer,joystick_right_down,207,215);
-    if(joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d1)
+    if(key[KEY_LEFT] && key[KEY_UP])
       draw_sprite(buffer,joystick_left_up,207,215);
-    if(joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d2)
+    if(key[KEY_LEFT] && key[KEY_DOWN])
       draw_sprite(buffer,joystick_left_down,207,215);
   }
   draw_sprite(buffer,cursor,mouse_x,mouse_y);
@@ -429,44 +428,44 @@ void setup(){
   game[1].path="C:\\Program Files (x86)\\Steam\\steam.exe";
   game[1].name="Steam Client";
   game[1].icon=icon_steam;
-  game[1].y=200;
   game[1].x=712;
+  game[1].y=300;
 
   game[2].path="steam://rungameid/730";
   game[2].name="Counter-strike: Global Offensive";
   game[2].icon=icon_csgo;
   game[2].x=1012;
-  game[2].y=200;
+  game[2].y=300;
 
   game[3].path="steam://rungameid/4000";
   game[3].name="Garry's Mod";
   game[3].icon=icon_garrysmod;
   game[3].x=1312;
-  game[3].y=200;
+  game[3].y=300;
 
   game[4].path="steam://rungameid/30";
   game[4].name="Day of Defeat: Classic";
   game[4].icon=icon_dayofdefeat;
   game[4].x=1612;
-  game[4].y=200;
+  game[4].y=300;
 
   game[5].path="poop";
   game[5].name="MAME";
   game[5].icon=icon_mame;
   game[5].x=1912;
-  game[5].y=200;
+  game[5].y=300;
 
   game[6].path="C:\\Riot Games\\League of Legends\\lol.launcher.exe";
   game[6].name="League of Legends";
   game[6].icon=icon_lol;
   game[6].x=2212;
-  game[6].y=200;
+  game[6].y=300;
 
   game[7].path="crap";
   game[7].name="Joystick";
   game[7].icon=icon_joystick;
   game[7].x=2512;
-  game[7].y=200;
+  game[7].y=300;
 }
 
 // MAIN loop
