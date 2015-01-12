@@ -295,6 +295,8 @@ void draw(){
     rectfill(buffer,0,0,1024,768,makecol(background_r,background_g,background_b));
     draw_trans_sprite( buffer, overlay, 0, 0);
 
+    textprintf_ex(buffer, font, 10, 10, makecol(255, 255, 255), makecol(0, 0, 0), "R:%f,%i G:%f,%i B:%f,%i", background_r, background_r_up, background_g, background_g_up, background_b, background_b_up);
+
     // Title
     textout_centre_ex( buffer, arimo_22, game[game_focus].name, 512, 100, makecol(0,0,0), -1);
 
@@ -311,6 +313,8 @@ void draw(){
       stretch_sprite( newIcon, icon[i], 0, 0, newIcon -> w, newIcon -> h);
       // Draw it with transparency
       draw_trans_sprite(buffer, newIcon, game[i].x - ((game_focus * 300) - icon_transition) - new_scale/2, game[i].y - new_scale/2);
+      // Delete temporary bitmap to free memory
+      destroy_bitmap(newIcon);
     }
   }
   // Joystick APP
