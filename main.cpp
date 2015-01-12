@@ -323,7 +323,7 @@ void setup(){
   srand(time(NULL));
 
   // Setup colours, options are VIBRANT, GREYSCALE, PASTEL, BALANCED and a speed (1 is default)
-  setup_colours( BALANCED, 0.2);
+  setup_colours( VIBRANT, 0.2);
 
   // Setup for FPS system
   LOCK_VARIABLE(ticks);
@@ -464,7 +464,7 @@ int main(){
   install_joystick(JOY_TYPE_AUTODETECT);
 
   // Init screen
-  set_gfx_mode(GFX_AUTODETECT_WINDOWED,1024,768, 0, 0);
+  set_gfx_mode(GFX_AUTODETECT,1024,768, 0, 0);
   install_sound(DIGI_AUTODETECT,MIDI_AUTODETECT,".");
 
   // Window Title
