@@ -5,6 +5,9 @@
 #include<shellapi.h>
 #include<fstream>
 #include<sstream>
+#include<string>
+#include<cstring>
+
 
 #define MENU 0
 #define JOYSTICK 1
@@ -15,13 +18,7 @@ using namespace std;
 BITMAP* buffer;
 BITMAP* cursor;
 
-BITMAP* icon_steam;
-BITMAP* icon_csgo;
-BITMAP* icon_garrysmod;
-BITMAP* icon_dayofdefeat;
-BITMAP* icon_mame;
-BITMAP* icon_lol;
-BITMAP* icon_joystick;
+BITMAP* icon[20];
 
 BITMAP* joystick_right;
 BITMAP* joystick_right_up;
@@ -69,8 +66,15 @@ int step;
 
 int settings[5];
 
+<<<<<<< HEAD
 // Scale of icon in focus
 const double icon_scale = 150;
+=======
+char* read_data;
+
+// Scale of icon
+const double icon_scale = 100;
+>>>>>>> origin/master
 
 // Background variables
 double background_r, background_g, background_b = 0;
@@ -90,7 +94,7 @@ struct game{
   int y;
   char* path;
   char* name;
-  BITMAP* icon;
+  string icon;
 }game[100];
 
 // FPS System
@@ -146,29 +150,32 @@ void abort_on_error(const char *message){
 
 // Write to settings file
 void write_settings(){
+<<<<<<< HEAD
   settings[3] = game[1].x;
+=======
+
+>>>>>>> origin/master
 
   ofstream settings_file;
   settings_file.open("games/game_1.txt");
 
-  for (int i = 0; i < 4; i++){
-    settings_file<<settings[i]<<" ";
-  }
-  settings_file<<game[1].path;
+   settings_file<<game[1].path<<" ";
+   settings_file<<game[1].icon<<" ";
 
-  settings_file.close();
+   settings_file.close();
 }
 
 // Read from settings file
 void read_settings(){
   ifstream read("games/game_1.dat");
-  for (int i = 0; i < 4; i++){
-    read>>settings[i];
-  }
-  read>>game[1].path;
+
+    read>>read_data;
+
+ // game[1].path=string(read_data);
+
   read.close();
 
-  game[1].x=settings[3];
+
 }
 
 // Setup colours for background
@@ -271,13 +278,27 @@ void draw(){
     // Title
     textout_centre_ex( buffer, arimo_22, game[game_focus].name, 512, 100, makecol(0,0,0), -1);
 
+
+      for (int i = 1; i < 8; i++){
+        draw_trans_sprite( buffer, icon[i], game[i].x-(game_focus*300), game[i].y);
+      }
+
+    // Temporary icon, allows minipulation
     // Draw icon (stretched if needed)
+<<<<<<< HEAD
     for (int i = 1; i <= 7; i++){
       // Initial scale is original
+=======
+    /*for (int i = 1; i <= 7; i++){
+      // Temporary icon, allows minipulation
+      BITMAP* newIcon = create_bitmap( 200, 200);
+      draw_trans_sprite( newIcon, game[i].icon, 0, 0);
+>>>>>>> origin/master
       int new_scale = 0;
       // If its the current icon, enlarge it
-      if( i == game_focus)
+     // if( i == game_focus)
         new_scale = icon_scale;
+<<<<<<< HEAD
       // Temporary icon, allows manipulation. Makes it the size of the original icon with scaling if needed
       BITMAP* newIcon = create_bitmap( game[i].icon -> w + new_scale, game[i].icon -> h + new_scale);
       // Stretches icon it if its in focus
@@ -285,6 +306,14 @@ void draw(){
       // Draw it with transparency
       draw_trans_sprite(buffer, newIcon, game[i].x - (game_focus * 300) - new_scale/2, game[i].y - new_scale/2);
     }
+=======
+      // Draw it
+      stretch_sprite(buffer, newIcon,
+        game[i].x - (game_focus * 300) - new_scale/2,
+        game[i].y - new_scale/2,
+        newIcon -> w + new_scale, newIcon -> h + new_scale);
+    }*/
+>>>>>>> origin/master
   }
   // Joystick APP
   if(GAME_STATE == JOYSTICK){
@@ -356,20 +385,20 @@ void setup(){
 
   // Load images
   // Game icons
-  if (!(icon_steam = load_bitmap("icons/icon_steam.png", NULL)))
-    abort_on_error("Cannot find image icons/icon_steam.png\nPlease check your files and try again");
-  if (!(icon_csgo = load_bitmap("icons/icon_csgo.png", NULL)))
-    abort_on_error("Cannot find image icons/icon_csgo.png\nPlease check your files and try again");
-  if (!(icon_garrysmod = load_bitmap("icons/icon_garrysmod.png", NULL)))
-    abort_on_error("Cannot find image icons/icon_garrysmod.png\nPlease check your files and try again");
-  if (!(icon_dayofdefeat = load_bitmap("icons/icon_dayofdefeat.png", NULL)))
-    abort_on_error("Cannot find image icons/icon_dayofdefeat.png\nPlease check your files and try again");
-  if (!(icon_mame = load_bitmap("icons/icon_mame.png", NULL)))
-    abort_on_error("Cannot find image icons/icon_mame.png\nPlease check your files and try again");
-  if (!(icon_lol = load_bitmap("icons/icon_lol.png", NULL)))
-    abort_on_error("Cannot find image icons/icon_lol.png\nPlease check your files and try again");
-  if (!(icon_joystick = load_bitmap("icons/icon_joystick.png", NULL)))
-    abort_on_error("Cannot find image icons/icon_joystick.png\nPlease check your files and try again");
+  game[1].icon="icon_steam";
+  game[2].icon="icon_csgo";
+  game[3].icon="icon_garrysmod";
+  game[4].icon="icon_dayofdefeat";
+  game[5].icon="icon_mame";
+  game[6].icon="icon_lol";
+  game[7].icon="icon_joystick";
+
+  for (int i = 1; i < 8; i++){
+    if (!( icon[i] = load_bitmap((string("icons/") + game[i].icon.c_str() + string(".png")).c_str(), NULL)))
+      abort_on_error((string("Cannot find image icons/") + game[i].icon.c_str() + string(".png\nCheck your custom icons folder")).c_str());
+  }
+
+
   if (!(cursor = load_bitmap("cursor.png", NULL)))
     abort_on_error("Cannot find image cursor.png\nPlease check your files and try again");
 
@@ -427,49 +456,49 @@ void setup(){
 
   game[1].path="C:\\Program Files (x86)\\Steam\\steam.exe";
   game[1].name="Steam Client";
+<<<<<<< HEAD
   game[1].icon=icon_steam;
+=======
+  game[1].y=200;
+>>>>>>> origin/master
   game[1].x=712;
   game[1].y=300;
 
   game[2].path="steam://rungameid/730";
   game[2].name="Counter-strike: Global Offensive";
-  game[2].icon=icon_csgo;
   game[2].x=1012;
   game[2].y=300;
 
   game[3].path="steam://rungameid/4000";
   game[3].name="Garry's Mod";
-  game[3].icon=icon_garrysmod;
   game[3].x=1312;
   game[3].y=300;
 
   game[4].path="steam://rungameid/30";
   game[4].name="Day of Defeat: Classic";
-  game[4].icon=icon_dayofdefeat;
   game[4].x=1612;
   game[4].y=300;
 
   game[5].path="poop";
   game[5].name="MAME";
-  game[5].icon=icon_mame;
   game[5].x=1912;
   game[5].y=300;
 
   game[6].path="C:\\Riot Games\\League of Legends\\lol.launcher.exe";
   game[6].name="League of Legends";
-  game[6].icon=icon_lol;
   game[6].x=2212;
   game[6].y=300;
 
   game[7].path="crap";
   game[7].name="Joystick";
-  game[7].icon=icon_joystick;
   game[7].x=2512;
   game[7].y=300;
 }
 
 // MAIN loop
 int main(){
+
+  read_settings();
   // Setup allegro
   allegro_init();
   alpng_init();
