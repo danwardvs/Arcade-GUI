@@ -5,6 +5,9 @@
 #include<shellapi.h>
 #include<fstream>
 #include<sstream>
+#include<string>
+#include<cstring>
+
 
 #define MENU 0
 #define JOYSTICK 1
@@ -62,6 +65,8 @@ int game_focus=1;
 int step;
 
 int settings[5];
+
+char* read_data;
 
 // Scale of icon
 const double icon_scale = 100;
@@ -154,13 +159,14 @@ void write_settings(){
 // Read from settings file
 void read_settings(){
   ifstream read("games/game_1.dat");
-  for (int i = 0; i < 4; i++){
-    read>>settings[i];
-  }
-  read>>game[1].path;
+
+    read>>read_data;
+
+ // game[1].path=string(read_data);
+
   read.close();
 
-  game[1].x=settings[3];
+
 }
 
 // Setup colours for background
@@ -462,6 +468,8 @@ void setup(){
 
 // MAIN loop
 int main(){
+
+  read_settings();
   // Setup allegro
   allegro_init();
   alpng_init();
