@@ -305,31 +305,23 @@ void draw(){
     // Buttons
     if(joy[0].button[0].b)
       draw_sprite(buffer,joystick_button_1,435,344);
-    else if(joy[0].button[1].b)
+    if(joy[0].button[1].b)
       draw_sprite(buffer,joystick_button_2,543,328);
-    else if(joy[0].button[2].b)
+    if(joy[0].button[2].b)
       draw_sprite(buffer,joystick_button_3,648,341);
-    else if(joy[0].button[3].b)
+    if(joy[0].button[3].b)
       draw_sprite(buffer,joystick_button_4,432,277);
-    else if(joy[0].button[4].b)
+    if(joy[0].button[4].b)
       draw_sprite(buffer,joystick_button_5,533,255);
-    else if(joy[0].button[5].b)
+    if(joy[0].button[5].b)
       draw_sprite(buffer,joystick_button_6,635,276);
-    else if(joy[0].button[10].b)
+    if(joy[0].button[10].b)
       draw_sprite(buffer,joystick_button_7,694,217);
-    else if(joy[0].button[11].b)
+    if(joy[0].button[11].b)
       draw_sprite(buffer,joystick_button_8,764,222);
 
     // Stick
-    if(joy[0].stick[0].axis[1].d1)
-      draw_sprite(buffer,joystick_up,207,215);
-    else if(joy[0].stick[0].axis[1].d2)
-      draw_sprite(buffer,joystick_down,207,215);
-    else if(joy[0].stick[0].axis[0].d1)
-      draw_sprite(buffer,joystick_left,207,215);
-    else if(joy[0].stick[0].axis[0].d2)
-      draw_sprite(buffer,joystick_right,207,215);
-    else if(joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d1)
+    if(joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d1)
       draw_sprite(buffer,joystick_right_up,207,215);
     else if(joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d2)
       draw_sprite(buffer,joystick_right_down,207,215);
@@ -337,6 +329,14 @@ void draw(){
       draw_sprite(buffer,joystick_left_up,207,215);
     else if(joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d2)
       draw_sprite(buffer,joystick_left_down,207,215);
+    else if(joy[0].stick[0].axis[1].d1)
+      draw_sprite(buffer,joystick_up,207,215);
+    else if(joy[0].stick[0].axis[1].d2)
+      draw_sprite(buffer,joystick_down,207,215);
+    else if(joy[0].stick[0].axis[0].d1)
+      draw_sprite(buffer,joystick_left,207,215);
+    else if(joy[0].stick[0].axis[0].d2)
+      draw_sprite(buffer,joystick_right,207,215);
 
     // Minigame
     draw_trans_sprite( buffer, ship, ship_x, ship_y);
