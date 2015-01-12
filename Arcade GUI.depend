@@ -8,3 +8,15 @@
 	<fstream>
 	<sstream>
 
+<<<<<<< HEAD
+1421029894 source:e:\allans programming\games indev\arcade-gui\main.cpp
+	<allegro.h>
+	<alpng.h>
+	<time.h>
+	<windows.h>
+	<shellapi.h>
+	<fstream>
+	<sstream>
+
+=======
+>>>>>>> origin/master
