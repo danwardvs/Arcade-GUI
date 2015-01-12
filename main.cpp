@@ -271,21 +271,27 @@ void draw(){
     // Title
     textout_centre_ex( buffer, arimo_22, game[game_focus].name, 512, 100, makecol(0,0,0), -1);
 
+
+      for (int i = 1; i < 7; i++){
+        draw_trans_sprite( buffer, game[i].icon, game[i].x-(game_focus*300), game[i].y);
+      }
+
+    // Temporary icon, allows minipulation
     // Draw icon (stretched if needed)
-    for (int i = 1; i <= 7; i++){
+    /*for (int i = 1; i <= 7; i++){
       // Temporary icon, allows minipulation
       BITMAP* newIcon = create_bitmap( 200, 200);
       draw_trans_sprite( newIcon, game[i].icon, 0, 0);
       int new_scale = 0;
       // If its the current icon, enlarge it
-      if( i == game_focus)
+     // if( i == game_focus)
         new_scale = icon_scale;
       // Draw it
       stretch_sprite(buffer, newIcon,
         game[i].x - (game_focus * 300) - new_scale/2,
         game[i].y - new_scale/2,
         newIcon -> w + new_scale, newIcon -> h + new_scale);
-    }
+    }*/
   }
   // Joystick APP
   if(GAME_STATE == JOYSTICK){
