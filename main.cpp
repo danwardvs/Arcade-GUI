@@ -71,6 +71,10 @@ int old_time;
 int game_focus = 1;
 int step;
 
+int old_mouse_x;
+int old_mouse_y;
+bool hide_mouse;
+
 int settings[5];
 
 // Scale of icon in focus
@@ -152,6 +156,14 @@ void abort_on_error(const char *message){
 	 }
 	 allegro_message("%s.\n %s\n", message, allegro_error);
 	 exit(-1);
+}
+bool joy_buttonpressed(){
+    bool buttonpressed=false;
+    for(int i=0; i<joy[0].num_buttons; i++)
+        if(joy[0].button[i].b)buttonpressed=true;
+    if(joy[0].stick[0].axis[1].d1 || joy[0].stick[0].axis[1].d2 || joy[0].stick[0].axis[0].d1 || joy[0].stick[0].axis[0].d2)buttonpressed=true;
+    return buttonpressed;
+
 }
 
 // Write to settings file
@@ -285,6 +297,14 @@ void update(){
     // Change background colour, with speed
     change_colours();
   }
+  //Hide mouse
+  if(joy_buttonpressed()){
+    hide_mouse=true;
+  }
+  if(mouse_x!=old_mouse_x || mouse_y!=old_mouse_y)hide_mouse=false;
+  old_mouse_x=mouse_x;
+  old_mouse_y=mouse_y;
+
 }
 
 // Draw to screen
@@ -368,7 +388,7 @@ void draw(){
     // Minigame
     draw_trans_sprite( buffer, ship, ship_x, ship_y);
   }
-  draw_trans_sprite(buffer,cursor,mouse_x,mouse_y);
+  if(!hide_mouse)draw_trans_sprite(buffer,cursor,mouse_x,mouse_y);
   draw_sprite(screen,buffer,0,0);
 }
 
@@ -533,7 +553,7 @@ int main(){
   install_joystick(JOY_TYPE_AUTODETECT);
 
   // Init screen
-  set_gfx_mode(GFX_AUTODETECT_WINDOWED, 1280, 1024, 0, 0);
+  set_gfx_mode(GFX_AUTODETECT, 1280, 1024, 0, 0);
   install_sound(DIGI_AUTODETECT,MIDI_AUTODETECT,".");
 
   // Window Title
