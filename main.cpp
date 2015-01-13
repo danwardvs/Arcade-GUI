@@ -212,7 +212,7 @@ void setup_colours( int preset_name, double newSpeed){
 // Change colours
 void change_colours(){
   // If colour value increase, increase by 1, else decrease by 1
-  // When increasing, background_r_up = true or 1, *2 -1 still equals 1
+  // When increasing,  coolbackground_r_up = true or 1, *2 -1 still equals 1
   // When increasing, background_r_up = false or 0, *2 -1 still equals -1
   background_r += (background_r_up *2 -1) * background_speed;
   background_g += (background_g_up *2 -1) * background_speed;
@@ -368,7 +368,7 @@ void draw(){
     // Minigame
     draw_trans_sprite( buffer, ship, ship_x, ship_y);
   }
-  draw_sprite(buffer,cursor,mouse_x,mouse_y);
+  draw_trans_sprite(buffer,cursor,mouse_x,mouse_y);
   draw_sprite(screen,buffer,0,0);
 }
 
