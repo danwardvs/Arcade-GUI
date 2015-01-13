@@ -15,35 +15,35 @@
 using namespace std;
 
 // Images
-BITMAP* buffer;
-BITMAP* cursor;
-BITMAP* overlay;
+BITMAP *buffer;
+BITMAP *cursor;
+BITMAP *overlay, *overlay_text;
 
 BITMAP* icon[20];
 
-BITMAP* joystick_right;
-BITMAP* joystick_right_up;
-BITMAP* joystick_right_down;
-BITMAP* joystick_up;
-BITMAP* joystick_left;
-BITMAP* joystick_left_up;
-BITMAP* joystick_left_down;
-BITMAP* joystick_down;
+BITMAP *joystick_right;
+BITMAP *joystick_right_up;
+BITMAP *joystick_right_down;
+BITMAP *joystick_up;
+BITMAP *joystick_left;
+BITMAP *joystick_left_up;
+BITMAP *joystick_left_down;
+BITMAP *joystick_down;
 
-BITMAP* joystick_background;
-BITMAP* joystick_button_1;
-BITMAP* joystick_button_2;
-BITMAP* joystick_button_3;
-BITMAP* joystick_button_4;
-BITMAP* joystick_button_5;
-BITMAP* joystick_button_6;
-BITMAP* joystick_button_7;
-BITMAP* joystick_button_8;
+BITMAP *joystick_background;
+BITMAP *joystick_button_1;
+BITMAP *joystick_button_2;
+BITMAP *joystick_button_3;
+BITMAP *joystick_button_4;
+BITMAP *joystick_button_5;
+BITMAP *joystick_button_6;
+BITMAP *joystick_button_7;
+BITMAP *joystick_button_8;
 
 
 // Minigame
-BITMAP* ship;
-BITMAP* joystick_background2;
+BITMAP *ship;
+BITMAP *joystick_background2;
 int ship_x, ship_y;
 
 // Fonts
@@ -52,7 +52,7 @@ FONT* f2;
 FONT* f3;
 FONT* f4;
 FONT* f5;
-FONT* arimo_22;
+FONT* segoe;
 
 // Close button handler
 bool close_button_pressed;
@@ -74,7 +74,7 @@ int step;
 int settings[5];
 
 // Scale of icon in focus
-const double icon_scale = 150;
+const double icon_scale = 200;
 
 // Transition of icons
 double icon_transition;
@@ -234,20 +234,20 @@ void update(){
   // Menu
   if(GAME_STATE==MENU){
     // Joystick APP
-    if((location_clicked(412,612,200,400) || joy[0].button[2].b) && step > 9 && icon_transition == 0){
+    if((location_clicked( 442, 837, 322, 717) || joy[0].button[2].b) && step > 9 && icon_transition == 0){
       ShellExecute(NULL, "open", game[game_focus].path, NULL, NULL, SW_SHOWDEFAULT);
       step = 0;
       if(game_focus == 7)
         GAME_STATE=JOYSTICK;
     }
     // Scroll Left
-    if((location_clicked(0,400,0,SCREEN_H)|| joy[0].stick[0].axis[0].d1) && step > 9 && icon_transition == 0 && game_focus > 1){
+    if((location_clicked( 0, 400, 0, SCREEN_H)|| joy[0].stick[0].axis[0].d1) && step > 9 && icon_transition == 0 && game_focus > 1){
       game_focus--;
       icon_transition = -300;
       step = 0;
     }
     // Scroll Right
-    if((location_clicked(SCREEN_W-400,SCREEN_W,0,SCREEN_H)|| joy[0].stick[0].axis[0].d2) && step>9 && icon_transition == 0 && game_focus < 7){
+    if((location_clicked( SCREEN_W - 400,SCREEN_W, 0, SCREEN_H)|| joy[0].stick[0].axis[0].d2) && step>9 && icon_transition == 0 && game_focus < 7){
       game_focus++;
       icon_transition = 300;
       step = 0;
@@ -277,9 +277,9 @@ void update(){
   }
   if(GAME_STATE == JOYSTICK){
     // Minigame
-    if(joy[0].stick[0].axis[0].d1 && ship_x > 209)
+    if(joy[0].stick[0].axis[0].d1 && ship_x > 337)
       ship_x--;
-    else if(joy[0].stick[0].axis[0].d2 && ship_x < 771)
+    else if(joy[0].stick[0].axis[0].d2 && ship_x < 899)
       ship_x++;
 
     // Change background colour, with speed
@@ -292,13 +292,12 @@ void draw(){
   // Menu
   if(GAME_STATE == MENU){
     // Background
-    rectfill(buffer,0,0,1024,768,makecol(background_r,background_g,background_b));
+    rectfill( buffer, 0, 0, SCREEN_W, SCREEN_H, makecol( background_r, background_g, background_b));
     draw_trans_sprite( buffer, overlay, 0, 0);
 
-    textprintf_ex(buffer, font, 10, 10, makecol(255, 255, 255), makecol(0, 0, 0), "R:%f,%i G:%f,%i B:%f,%i", background_r, background_r_up, background_g, background_g_up, background_b, background_b_up);
-
     // Title
-    textout_centre_ex( buffer, arimo_22, game[game_focus].name, 512, 100, makecol(0,0,0), -1);
+    draw_trans_sprite( buffer, overlay_text, 0, 50);
+    textout_centre_ex( buffer, segoe, game[game_focus].name, SCREEN_W/2, 80, makecol(0,0,0), -1);
 
     // Draw icon (stretched if needed)
     for (int i = 1; i <= 7; i++){
@@ -320,7 +319,8 @@ void draw(){
   // Joystick APP
   if(GAME_STATE == JOYSTICK){
     // Background
-    rectfill(buffer,0,0,1024,768,makecol(background_r,background_g,background_b));
+    rectfill( buffer, 0, 0, SCREEN_W, SCREEN_H, makecol( background_r, background_g, background_b));
+
     // 2 Overlays for added effect
     draw_trans_sprite( buffer, overlay, 0, 0);
     draw_trans_sprite( buffer, overlay, 0, 0);
@@ -331,39 +331,39 @@ void draw(){
 
     // Buttons
     if(joy[0].button[0].b)
-      draw_sprite(buffer,joystick_button_1,435,344);
+      draw_sprite(buffer,joystick_button_1,563,600);
     if(joy[0].button[1].b)
-      draw_sprite(buffer,joystick_button_2,543,328);
+      draw_sprite(buffer,joystick_button_2,671,584);
     if(joy[0].button[2].b)
-      draw_sprite(buffer,joystick_button_3,648,341);
+      draw_sprite(buffer,joystick_button_3,776,597);
     if(joy[0].button[3].b)
-      draw_sprite(buffer,joystick_button_4,432,277);
+      draw_sprite(buffer,joystick_button_4,560,533);
     if(joy[0].button[4].b)
-      draw_sprite(buffer,joystick_button_5,533,255);
+      draw_sprite(buffer,joystick_button_5,661,511);
     if(joy[0].button[5].b)
-      draw_sprite(buffer,joystick_button_6,635,276);
+      draw_sprite(buffer,joystick_button_6,763,532);
     if(joy[0].button[10].b)
-      draw_sprite(buffer,joystick_button_7,694,217);
+      draw_sprite(buffer,joystick_button_7,822,473);
     if(joy[0].button[11].b)
-      draw_sprite(buffer,joystick_button_8,764,222);
+      draw_sprite(buffer,joystick_button_8,892,478);
 
     // Stick
     if(joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d1)
-      draw_sprite(buffer,joystick_right_up,207,215);
+      draw_sprite(buffer,joystick_right_up,335,471);
     else if(joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d2)
-      draw_sprite(buffer,joystick_right_down,207,215);
+      draw_sprite(buffer,joystick_right_down,335,471);
     else if(joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d1)
-      draw_sprite(buffer,joystick_left_up,207,215);
+      draw_sprite(buffer,joystick_left_up,335,471);
     else if(joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d2)
-      draw_sprite(buffer,joystick_left_down,207,215);
+      draw_sprite(buffer,joystick_left_down,335,471);
     else if(joy[0].stick[0].axis[1].d1)
-      draw_sprite(buffer,joystick_up,207,215);
+      draw_sprite(buffer,joystick_up,335,471);
     else if(joy[0].stick[0].axis[1].d2)
-      draw_sprite(buffer,joystick_down,207,215);
+      draw_sprite(buffer,joystick_down,335,471);
     else if(joy[0].stick[0].axis[0].d1)
-      draw_sprite(buffer,joystick_left,207,215);
+      draw_sprite(buffer,joystick_left,335,471);
     else if(joy[0].stick[0].axis[0].d2)
-      draw_sprite(buffer,joystick_right,207,215);
+      draw_sprite(buffer,joystick_right,335,471);
 
     // Minigame
     draw_trans_sprite( buffer, ship, ship_x, ship_y);
@@ -375,7 +375,7 @@ void draw(){
 // Setup game
 void setup(){
   // Create buffer
-  buffer = create_bitmap( 1024, 768);
+  buffer = create_bitmap( 1280, 1024);
 
   // Allow transparency
   set_alpha_blender();
@@ -410,69 +410,71 @@ void setup(){
   game[7].icon="icon_joystick";
 
   // Minigame
-  ship_x = 477;
-  ship_y = 165;
+  ship_x = 620;
+  ship_y = 419;
 
   for (int i = 1; i < 8; i++){
-    if (!( icon[i] = load_bitmap((string("icons/") + game[i].icon.c_str() + string(".png")).c_str(), NULL)))
-      abort_on_error((string("Cannot find image icons/") + game[i].icon.c_str() + string(".png\nCheck your custom icons folder")).c_str());
+    if (!( icon[i] = load_bitmap((string("images/icons/") + game[i].icon.c_str() + string(".png")).c_str(), NULL)))
+      abort_on_error((string("Cannot find image images/icons/") + game[i].icon.c_str() + string(".png\nCheck your custom icons folder")).c_str());
   }
 
 
-  if (!(cursor = load_bitmap("cursor.png", NULL)))
-    abort_on_error("Cannot find image cursor.png\nPlease check your files and try again");
-  if (!(overlay = load_bitmap("overlay.png", NULL)))
-    abort_on_error("Cannot find image overlay.png\nPlease check your files and try again");
+  if (!(cursor = load_bitmap("images/cursor.png", NULL)))
+    abort_on_error("Cannot find image images/cursor.png\nPlease check your files and try again");
+  if (!(overlay = load_bitmap("images/overlay.png", NULL)))
+    abort_on_error("Cannot find image images/overlay.png\nPlease check your files and try again");
+  if (!(overlay_text = load_bitmap("images/overlay_text.png", NULL)))
+    abort_on_error("Cannot find image images/overlay_text.png\nPlease check your files and try again");
 
 
   // Joystick
-  if (!(joystick_background= load_bitmap("joystick/joystick_background.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_background.png\nPlease check your files and try again");
-  if (!(joystick_button_1 = load_bitmap("joystick/joystick_button_1.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_button_1.png\nPlease check your files and try again");
-  if (!(joystick_button_2 = load_bitmap("joystick/joystick_button_2.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_button_2.png\nPlease check your files and try again");
-  if (!(joystick_button_3 = load_bitmap("joystick/joystick_button_3.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_button_3.png\nPlease check your files and try again");
-  if (!(joystick_button_4 = load_bitmap("joystick/joystick_button_4.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_button_4.png\nPlease check your files and try again");
-  if (!(joystick_button_5 = load_bitmap("joystick/joystick_button_5.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_button_5.png\nPlease check your files and try again");
-  if (!(joystick_button_6 = load_bitmap("joystick/joystick_button_6.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_button_6.png\nPlease check your files and try again");
-  if (!(joystick_button_7 = load_bitmap("joystick/joystick_button_7.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_button_7.png\nPlease check your files and try again");
-  if (!(joystick_button_8 = load_bitmap("joystick/joystick_button_8.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_button_8.png\nPlease check your files and try again");
+  if (!(joystick_background= load_bitmap("images/joystick/joystick_background.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_background.png\nPlease check your files and try again");
+  if (!(joystick_button_1 = load_bitmap("images/joystick/joystick_button_1.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_button_1.png\nPlease check your files and try again");
+  if (!(joystick_button_2 = load_bitmap("images/joystick/joystick_button_2.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_button_2.png\nPlease check your files and try again");
+  if (!(joystick_button_3 = load_bitmap("images/joystick/joystick_button_3.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_button_3.png\nPlease check your files and try again");
+  if (!(joystick_button_4 = load_bitmap("images/joystick/joystick_button_4.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_button_4.png\nPlease check your files and try again");
+  if (!(joystick_button_5 = load_bitmap("images/joystick/joystick_button_5.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_button_5.png\nPlease check your files and try again");
+  if (!(joystick_button_6 = load_bitmap("images/joystick/joystick_button_6.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_button_6.png\nPlease check your files and try again");
+  if (!(joystick_button_7 = load_bitmap("images/joystick/joystick_button_7.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_button_7.png\nPlease check your files and try again");
+  if (!(joystick_button_8 = load_bitmap("images/joystick/joystick_button_8.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_button_8.png\nPlease check your files and try again");
 
-  if (!(joystick_up = load_bitmap("joystick/joystick_up.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_up.png\nPlease check your files and try again");
-  if (!(joystick_down = load_bitmap("joystick/joystick_down.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_down.png\nPlease check your files and try again");
-  if (!(joystick_right = load_bitmap("joystick/joystick_right.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_right.png\nPlease check your files and try again");
-  if (!(joystick_left = load_bitmap("joystick/joystick_left.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_left.png\nPlease check your files and try again");
-  if (!(joystick_left_up = load_bitmap("joystick/joystick_left_up.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_left_up.png\nPlease check your files and try again");
-  if (!(joystick_left_down = load_bitmap("joystick/joystick_left_down.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_left_down.png\nPlease check your files and try again");
-  if (!(joystick_right_up = load_bitmap("joystick/joystick_right_up.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_right_up.png\nPlease check your files and try again");
-  if (!(joystick_right_down = load_bitmap("joystick/joystick_right_down.png", NULL)))
-    abort_on_error("Cannot find image joystick/joystick_right_down.png\nPlease check your files and try again");
+  if (!(joystick_up = load_bitmap("images/joystick/joystick_up.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_up.png\nPlease check your files and try again");
+  if (!(joystick_down = load_bitmap("images/joystick/joystick_down.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_down.png\nPlease check your files and try again");
+  if (!(joystick_right = load_bitmap("images/joystick/joystick_right.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_right.png\nPlease check your files and try again");
+  if (!(joystick_left = load_bitmap("images/joystick/joystick_left.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_left.png\nPlease check your files and try again");
+  if (!(joystick_left_up = load_bitmap("images/joystick/joystick_left_up.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_left_up.png\nPlease check your files and try again");
+  if (!(joystick_left_down = load_bitmap("images/joystick/joystick_left_down.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_left_down.png\nPlease check your files and try again");
+  if (!(joystick_right_up = load_bitmap("images/joystick/joystick_right_up.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_right_up.png\nPlease check your files and try again");
+  if (!(joystick_right_down = load_bitmap("images/joystick/joystick_right_down.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/joystick_right_down.png\nPlease check your files and try again");
 
-  if (!(joystick_background2 = load_bitmap("joystick/background.png", NULL)))
-    abort_on_error("Cannot find image joystick/background.png\nPlease check your files and try again");
-  if (!(ship = load_bitmap("joystick/ship.png", NULL)))
-    abort_on_error("Cannot find image joystick/ship.png\nPlease check your files and try again");
+  if (!(joystick_background2 = load_bitmap("images/joystick/background.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/background.png\nPlease check your files and try again");
+  if (!(ship = load_bitmap("images/joystick/ship.png", NULL)))
+    abort_on_error("Cannot find image images/joystick/ship.png\nPlease check your files and try again");
 
   // Load fonts
-  f1 = load_font("arimo_22.pcx", NULL, NULL);
+  f1 = load_font("segoe_ui_semibold_bold_62pt_antia.pcx", NULL, NULL);
   f2 = extract_font_range(f1, ' ', 'A'-1);
   f3 = extract_font_range(f1, 'A', 'Z');
   f4 = extract_font_range(f1, 'Z'+1, 'z');
-  arimo_22 = merge_fonts(f4, f5 = merge_fonts(f2, f3));
+  segoe = merge_fonts(f4, f5 = merge_fonts(f2, f3));
 
   // Destroy temporary fonts
   destroy_font(f1);
@@ -483,38 +485,38 @@ void setup(){
 
   game[1].path="C:\\Program Files (x86)\\Steam\\steam.exe";
   game[1].name="Steam Client";
-  game[1].x=712;
-  game[1].y=300;
+  game[1].x=840;
+  game[1].y=420;
 
   game[2].path="steam://rungameid/730";
   game[2].name="Counter-strike: Global Offensive";
-  game[2].x=1012;
-  game[2].y=300;
+  game[2].x=1140;
+  game[2].y=420;
 
   game[3].path="steam://rungameid/4000";
   game[3].name="Garry's Mod";
-  game[3].x=1312;
-  game[3].y=300;
+  game[3].x=1440;
+  game[3].y=420;
 
   game[4].path="steam://rungameid/30";
   game[4].name="Day of Defeat: Classic";
-  game[4].x=1612;
-  game[4].y=300;
+  game[4].x=1740;
+  game[4].y=420;
 
   game[5].path="poop";
   game[5].name="MAME";
-  game[5].x=1912;
-  game[5].y=300;
+  game[5].x=2040;
+  game[5].y=420;
 
   game[6].path="C:\\Riot Games\\League of Legends\\lol.launcher.exe";
   game[6].name="League of Legends";
-  game[6].x=2212;
-  game[6].y=300;
+  game[6].x=2340;
+  game[6].y=420;
 
   game[7].path="crap";
   game[7].name="Joystick";
-  game[7].x=2512;
-  game[7].y=300;
+  game[7].x=2640;
+  game[7].y=420;
 }
 
 // MAIN loop
@@ -531,7 +533,7 @@ int main(){
   install_joystick(JOY_TYPE_AUTODETECT);
 
   // Init screen
-  set_gfx_mode(GFX_AUTODETECT_WINDOWED,1024,768, 0, 0);
+  set_gfx_mode(GFX_AUTODETECT_WINDOWED, 1280, 1024, 0, 0);
   install_sound(DIGI_AUTODETECT,MIDI_AUTODETECT,".");
 
   // Window Title
