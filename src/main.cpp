@@ -18,6 +18,7 @@ using namespace std;
 BITMAP *buffer;
 BITMAP *cursor;
 BITMAP *overlay, *overlay_text;
+BITMAP *overlay_temp, *overlay_text_temp;
 
 BITMAP* icon[20];
 
@@ -133,8 +134,8 @@ int convertStringToInt(string newString){
 }
 
 // Area clicked
-bool location_clicked(int min_x,int max_x,int min_y,int max_y){
-  if(mouse_x > min_x && mouse_x < max_x && mouse_y > min_y && mouse_y < max_y && (mouse_b & 1 || joy[0].button[1].b))
+bool location_clicked( int min_x, int max_x, int min_y, int max_y){
+  if(mouse_x >= min_x && mouse_x <= max_x && mouse_y >= min_y && mouse_y <= max_y && (mouse_b & 1 || joy[0].button[1].b))
     return true;
   else return false;
 }
@@ -173,8 +174,8 @@ void write_settings(){
   ofstream settings_file;
   settings_file.open("games/game_1.txt");
 
-   settings_file<<game[1].path<<" ";
-   settings_file<<game[1].icon<<" ";
+   settings_file << game[1].path<<" ";
+   settings_file << game[1].icon<<" ";
 
    settings_file.close();
 }
@@ -244,7 +245,7 @@ void update(){
   // Ask joystick for keys
   poll_joystick();
   // Menu
-  if(GAME_STATE==MENU){
+  if( GAME_STATE==MENU){
     // Joystick APP
     if((location_clicked( 442, 837, 322, 717) || joy[0].button[2].b) && step > 9 && icon_transition == 0){
       ShellExecute(NULL, "open", game[game_focus].path, NULL, NULL, SW_SHOWDEFAULT);
@@ -287,24 +288,25 @@ void update(){
     // Step counter
     step++;
   }
-  if(GAME_STATE == JOYSTICK){
-    // Minigame
-    if(joy[0].stick[0].axis[0].d1 && ship_x > 337)
-      ship_x--;
-    else if(joy[0].stick[0].axis[0].d2 && ship_x < 899)
-      ship_x++;
+  if( GAME_STATE == JOYSTICK){
+    // Mini Game
+    if( joy[0].stick[0].axis[0].d1 && (ship_x > (SCREEN_W/2 - 298)))
+      ship_x -= 2;
+    else if( joy[0].stick[0].axis[0].d2 && (ship_x < (SCREEN_W/2 + 298 - ship -> w)))
+      ship_x += 2;
 
-    // Change background colour, with speed
+    // Change background colour, with spesed
     change_colours();
   }
   //Hide mouse
-  if(joy_buttonpressed()){
+  if( joy_buttonpressed())
     hide_mouse=true;
-  }
-  if(mouse_x!=old_mouse_x || mouse_y!=old_mouse_y)hide_mouse=false;
-  old_mouse_x=mouse_x;
-  old_mouse_y=mouse_y;
 
+  if( mouse_x != old_mouse_x || mouse_y != old_mouse_y)
+    hide_mouse = false;
+
+  old_mouse_x = mouse_x;
+  old_mouse_y = mouse_y;
 }
 
 // Draw to screen
@@ -320,7 +322,7 @@ void draw(){
     textout_centre_ex( buffer, segoe, game[game_focus].name, SCREEN_W/2, 80, makecol(0,0,0), -1);
 
     // Draw icon (stretched if needed)
-    for (int i = 1; i <= 7; i++){
+    for( int i = 1; i <= 7; i++){
       // Initial scale is original
       int new_scale = 0;
       // If its the current icon, enlarge it
@@ -331,9 +333,9 @@ void draw(){
       // Stretches icon it if its in focus
       stretch_sprite( newIcon, icon[i], 0, 0, newIcon -> w, newIcon -> h);
       // Draw it with transparency
-      draw_trans_sprite(buffer, newIcon, game[i].x - ((game_focus * 300) - icon_transition) - new_scale/2, game[i].y - new_scale/2);
+      draw_trans_sprite( buffer, newIcon, game[i].x - ((game_focus * 300) - icon_transition) - new_scale/2, game[i].y - new_scale/2);
       // Delete temporary bitmap to free memory
-      destroy_bitmap(newIcon);
+      destroy_bitmap( newIcon);
     }
   }
   // Joystick APP
@@ -346,56 +348,57 @@ void draw(){
     draw_trans_sprite( buffer, overlay, 0, 0);
 
     // Background
-    draw_trans_sprite( buffer, joystick_background2, 0, 0);
-    draw_trans_sprite( buffer, joystick_background, 0, 0);
+    draw_trans_sprite( buffer, joystick_background2, SCREEN_W/2 - (joystick_background2 -> w/2), SCREEN_H - (joystick_background -> h + joystick_background2 -> h));
+    draw_trans_sprite( buffer, joystick_background , SCREEN_W/2 - (joystick_background  -> w/2), SCREEN_H - (joystick_background -> h));
 
     // Buttons
-    if(joy[0].button[0].b)
-      draw_sprite(buffer,joystick_button_1,563,600);
-    if(joy[0].button[1].b)
-      draw_sprite(buffer,joystick_button_2,671,584);
-    if(joy[0].button[2].b)
-      draw_sprite(buffer,joystick_button_3,776,597);
-    if(joy[0].button[3].b)
-      draw_sprite(buffer,joystick_button_4,560,533);
-    if(joy[0].button[4].b)
-      draw_sprite(buffer,joystick_button_5,661,511);
-    if(joy[0].button[5].b)
-      draw_sprite(buffer,joystick_button_6,763,532);
-    if(joy[0].button[10].b)
-      draw_sprite(buffer,joystick_button_7,822,473);
-    if(joy[0].button[11].b)
-      draw_sprite(buffer,joystick_button_8,892,478);
+    if( joy[0].button[0].b)
+      draw_sprite( buffer, joystick_button_1, SCREEN_W/2 - 78, SCREEN_H - 425);
+    if( joy[0].button[1].b)
+      draw_sprite( buffer, joystick_button_2, SCREEN_W/2 + 30, SCREEN_H - 440);
+    if( joy[0].button[2].b)
+      draw_sprite( buffer, joystick_button_3, SCREEN_W/2 + 135, SCREEN_H - 428);
+    if( joy[0].button[3].b)
+      draw_sprite( buffer, joystick_button_4, SCREEN_W/2 - 82, SCREEN_H - 491);
+    if( joy[0].button[4].b)
+      draw_sprite( buffer, joystick_button_5, SCREEN_W/2 + 20, SCREEN_H - 511);
+    if( joy[0].button[5].b)
+      draw_sprite( buffer, joystick_button_6, SCREEN_W/2 + 122, SCREEN_H - 491);
+    if( joy[0].button[10].b)
+      draw_sprite( buffer, joystick_button_7, SCREEN_W/2 + 179, SCREEN_H - 552);
+    if( joy[0].button[11].b)
+      draw_sprite( buffer, joystick_button_8, SCREEN_W/2 + 251, SCREEN_H - 546);
 
     // Stick
-    if(joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d1)
-      draw_sprite(buffer,joystick_right_up,335,471);
-    else if(joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d2)
-      draw_sprite(buffer,joystick_right_down,335,471);
-    else if(joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d1)
-      draw_sprite(buffer,joystick_left_up,335,471);
-    else if(joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d2)
-      draw_sprite(buffer,joystick_left_down,335,471);
-    else if(joy[0].stick[0].axis[1].d1)
-      draw_sprite(buffer,joystick_up,335,471);
-    else if(joy[0].stick[0].axis[1].d2)
-      draw_sprite(buffer,joystick_down,335,471);
-    else if(joy[0].stick[0].axis[0].d1)
-      draw_sprite(buffer,joystick_left,335,471);
-    else if(joy[0].stick[0].axis[0].d2)
-      draw_sprite(buffer,joystick_right,335,471);
+    if( joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d1)
+      draw_sprite( buffer, joystick_right_up, SCREEN_W/2 - 306, SCREEN_H - 553);
+    else if( joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d2)
+      draw_sprite( buffer,joystick_right_down, SCREEN_W/2 - 306, SCREEN_H - 553);
+    else if( joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d1)
+      draw_sprite( buffer, joystick_left_up, SCREEN_W/2 - 306, SCREEN_H - 553);
+    else if( joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d2)
+      draw_sprite( buffer, joystick_left_down, SCREEN_W/2 - 306, SCREEN_H - 553);
+    else if( joy[0].stick[0].axis[1].d1)
+      draw_sprite( buffer, joystick_up, SCREEN_W/2 - 306, SCREEN_H - 553);
+    else if( joy[0].stick[0].axis[1].d2)
+      draw_sprite( buffer, joystick_down, SCREEN_W/2 - 306, SCREEN_H - 553);
+    else if( joy[0].stick[0].axis[0].d1)
+      draw_sprite(buffer, joystick_left, SCREEN_W/2 - 306, SCREEN_H - 553);
+    else if( joy[0].stick[0].axis[0].d2)
+      draw_sprite( buffer, joystick_right, SCREEN_W/2 - 306, SCREEN_H - 553);
 
     // Minigame
     draw_trans_sprite( buffer, ship, ship_x, ship_y);
   }
-  if(!hide_mouse)draw_trans_sprite(buffer,cursor,mouse_x,mouse_y);
+  if(!hide_mouse)
+    draw_trans_sprite( buffer, cursor, mouse_x, mouse_y);
   draw_sprite(screen,buffer,0,0);
 }
 
 // Setup game
 void setup(){
   // Create buffer
-  buffer = create_bitmap( 1280, 1024);
+  buffer = create_bitmap( SCREEN_W, SCREEN_H);
 
   // Allow transparency
   set_alpha_blender();
@@ -430,21 +433,29 @@ void setup(){
   game[7].icon="icon_joystick";
 
   // Minigame
-  ship_x = 620;
-  ship_y = 419;
+  ship_x = SCREEN_W/2;
+  ship_y = SCREEN_H - 630;
 
+  // Icon images
   for (int i = 1; i < 8; i++){
     if (!( icon[i] = load_bitmap((string("images/icons/") + game[i].icon.c_str() + string(".png")).c_str(), NULL)))
       abort_on_error((string("Cannot find image images/icons/") + game[i].icon.c_str() + string(".png\nCheck your custom icons folder")).c_str());
   }
 
-
+  // Gui images
   if (!(cursor = load_bitmap("images/cursor.png", NULL)))
     abort_on_error("Cannot find image images/cursor.png\nPlease check your files and try again");
-  if (!(overlay = load_bitmap("images/overlay.png", NULL)))
+  if (!(overlay_temp = load_bitmap("images/overlay.png", NULL)))
     abort_on_error("Cannot find image images/overlay.png\nPlease check your files and try again");
-  if (!(overlay_text = load_bitmap("images/overlay_text.png", NULL)))
+  if (!(overlay_text_temp = load_bitmap("images/overlay_text.png", NULL)))
     abort_on_error("Cannot find image images/overlay_text.png\nPlease check your files and try again");
+
+  // Overlay Stretch
+  overlay = create_bitmap( SCREEN_W, SCREEN_H);
+  stretch_sprite( overlay, overlay_temp, 0, 0, SCREEN_W, SCREEN_H);
+
+  overlay_text = create_bitmap( SCREEN_W, overlay_text_temp -> h);
+  stretch_sprite( overlay_text, overlay_text_temp, 0, 0, SCREEN_W, overlay_text_temp -> h);
 
 
   // Joystick
@@ -505,38 +516,30 @@ void setup(){
 
   game[1].path="C:\\Program Files (x86)\\Steam\\steam.exe";
   game[1].name="Steam Client";
-  game[1].x=840;
-  game[1].y=420;
 
   game[2].path="steam://rungameid/730";
   game[2].name="Counter-strike: Global Offensive";
-  game[2].x=1140;
-  game[2].y=420;
 
   game[3].path="steam://rungameid/4000";
   game[3].name="Garry's Mod";
-  game[3].x=1440;
-  game[3].y=420;
 
   game[4].path="steam://rungameid/30";
   game[4].name="Day of Defeat: Classic";
-  game[4].x=1740;
-  game[4].y=420;
 
   game[5].path="poop";
   game[5].name="MAME";
-  game[5].x=2040;
-  game[5].y=420;
 
   game[6].path="C:\\Riot Games\\League of Legends\\lol.launcher.exe";
   game[6].name="League of Legends";
-  game[6].x=2340;
-  game[6].y=420;
 
   game[7].path="crap";
   game[7].name="Joystick";
-  game[7].x=2640;
-  game[7].y=420;
+
+  // X and Y Positions
+  for( int i = 1; i <= 7; i++){
+    game[i].x = (SCREEN_W/2 - 100) + (300 * i);
+    game[i].y = (SCREEN_H/2 - 100) + SCREEN_H/10;
+  }
 }
 
 // MAIN loop
@@ -553,7 +556,9 @@ int main(){
   install_joystick(JOY_TYPE_AUTODETECT);
 
   // Init screen
-  set_gfx_mode(GFX_AUTODETECT, 1280, 1024, 0, 0);
+  int w, h;
+  get_desktop_resolution(&w, &h);
+  set_gfx_mode(GFX_AUTODETECT, w, h, 0, 0);
   install_sound(DIGI_AUTODETECT,MIDI_AUTODETECT,".");
 
   // Window Title
