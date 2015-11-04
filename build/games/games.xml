@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<data>
+  <game id ="Garry's Mod">
+	<type = "Steam"></type>
+	<url = "steam://rungameid/4000"><url>
+	<icon = "icon_garrysmod">
+	
+  </game>
+  
+</data>
