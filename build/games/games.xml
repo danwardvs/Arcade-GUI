@@ -3,8 +3,7 @@
   
     <game id="Steam Client" number ="1" path="C:\\Program Files (x86)\\Steam\\steam.exe" icon = "icon_steam"></game>
 	<game id="Counter-Strike: Global Offensive" number ="2" path="steam://rungameid/730" icon = "icon_csgo"></game>
-	
-  
-  
+	<game id="Garry's Mod" number ="3" path="steam://rungameid/4000" icon = "icon_garrysmod"></game>
+	<game id="DAY OF KILLMEKITTENS" number ="4" path="steam://rungameid/30" icon = "meowmeow"></game>
 </data>
 
