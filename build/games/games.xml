@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
   
-    <game id="KILLMEPLS" number ="1">
-    <properties path="C:\\Program Files (x86)\\Steam\\steam.exe" icon = "icon_steam">
-  </properties>
-</game>
+    <game id="Steam Client" number ="1" path="C:\\Program Files (x86)\\Steam\\steam.exe" icon = "icon_steam"></game>
+	<game id="Counter-Strike: Global Offensive" number ="2" path="steam://rungameid/730" icon = "icon_csgo"></game>
+	
   
   
 </data>

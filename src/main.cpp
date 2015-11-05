@@ -27,7 +27,7 @@ BITMAP *cursor;
 BITMAP *overlay, *overlay_text;
 BITMAP *overlay_temp, *overlay_text_temp;
 
-BITMAP* icon[20];
+BITMAP* icon[100];
 
 BITMAP *joystick_right;
 BITMAP *joystick_right_up;
@@ -83,6 +83,7 @@ int old_mouse_x;
 int old_mouse_y;
 bool hide_mouse;
 
+int existing_games;
 int settings[5];
 
 // Scale of icon in focus
@@ -108,9 +109,10 @@ enum background_colours{
 
 // Game icons
 struct game{
+  bool exists;
   int x;
   int y;
-  char* path;
+  string path;
   string name;
   string icon;
 }game[100];
@@ -193,16 +195,19 @@ void load_xml(int game_index){
 
     for (xml_node<> * brewery_node = root_node->first_node("game"); brewery_node; brewery_node = brewery_node->next_sibling())
     {
-
+      if( convertStringToInt(brewery_node->first_attribute("number")->value()) == game_index){
       //Interate over the beers
-      game[game_index].name = brewery_node->first_attribute("id")->value();
-   //   if(generatedNumberResult==random_number){
+        game[game_index].name = brewery_node->first_attribute("id")->value();
+        game[game_index].path = brewery_node->first_attribute("path")->value();
+        game[game_index].icon = brewery_node->first_attribute("icon")->value();
+        game[game_index].exists = true;
+      //if(generatedNumberResult==random_number){
 
        // for(xml_node<> * beer_node = brewery_node->first_node("icon_path"); beer_node; beer_node = beer_node->next_sibling())
        // {
        //   game[game_index].icon = atoi(brewery_node->first_attribute("icon")->value());
        //}
-
+      }
       //}*/
     }
 
@@ -266,10 +271,11 @@ void update(){
   if( GAME_STATE==MENU){
     // Joystick APP
     if((location_clicked( 442, 837, 322, 717) || joy[0].button[2].b) && step > 9 && icon_transition == 0){
-      ShellExecute(NULL, "open", game[game_focus].path, NULL, NULL, SW_SHOWDEFAULT);
+      ShellExecute(NULL, "open", game[game_focus].path.c_str(), NULL, NULL, SW_SHOWDEFAULT);
       step = 0;
-      if(game_focus == 7)
-        GAME_STATE=JOYSTICK;
+      //Fix hacky code
+      //if(game_focus == 7)
+      //  GAME_STATE=JOYSTICK;
     }
     // Scroll Left
     if((location_clicked( 0, 400, 0, SCREEN_H)|| joy[0].stick[0].axis[0].d1) && step > 9 && icon_transition == 0 && game_focus > 1){
@@ -278,7 +284,7 @@ void update(){
       step = 0;
     }
     // Scroll Right
-    if((location_clicked( SCREEN_W - 400,SCREEN_W, 0, SCREEN_H)|| joy[0].stick[0].axis[0].d2) && step>9 && icon_transition == 0 && game_focus < 7){
+    if((location_clicked( SCREEN_W - 400,SCREEN_W, 0, SCREEN_H)|| joy[0].stick[0].axis[0].d2) && step>9 && icon_transition == 0 && game_focus < existing_games){
       game_focus++;
       icon_transition = 300;
       step = 0;
@@ -334,20 +340,22 @@ void draw(){
     textout_centre_ex( buffer, segoe, game[game_focus].name.c_str(), SCREEN_W/2, 80, makecol(0,0,0), -1);
 
     // Draw icon (stretched if needed)
-   for( int i = 1; i <= 7; i++){
-      // Initial scale is original
-      int new_scale = 0;
-      // If its the current icon, enlarge it
-      if( i == game_focus)
-        new_scale = icon_scale;
-      // Temporary icon, allows manipulation. Makes it the size of the original icon with scaling if needed
-      BITMAP* newIcon = create_bitmap( icon[i] -> w + new_scale, icon[i] -> h + new_scale);
-      // Stretches icon it if its in focus
-      stretch_sprite( newIcon, icon[i], 0, 0, newIcon -> w, newIcon -> h);
-      // Draw it with transparency
-      draw_trans_sprite( buffer, newIcon, game[i].x - ((game_focus * 300) - icon_transition) - new_scale/2, game[i].y - new_scale/2);
-      // Delete temporary bitmap to free memory
-      destroy_bitmap( newIcon);
+   for( int i = 1; i <= 100; i++){
+      if(game[i].exists){
+        // Initial scale is original
+        int new_scale = 0;
+        // If its the current icon, enlarge it
+        if( i == game_focus)
+          new_scale = icon_scale;
+        // Temporary icon, allows manipulation. Makes it the size of the original icon with scaling if needed
+        BITMAP* newIcon = create_bitmap( icon[i] -> w + new_scale, icon[i] -> h + new_scale);
+        // Stretches icon it if its in focus
+        stretch_sprite( newIcon, icon[i], 0, 0, newIcon -> w, newIcon -> h);
+        // Draw it with transparency
+        draw_trans_sprite( buffer, newIcon, game[i].x - ((game_focus * 300) - icon_transition) - new_scale/2, game[i].y - new_scale/2);
+        // Delete temporary bitmap to free memory
+        destroy_bitmap( newIcon);
+      }
     }
   }
   // Joystick APP
@@ -410,10 +418,9 @@ void draw(){
 // Setup game
 void setup(){
 
-  load_xml(1);
-  game[1].path="C:\\Program Files (x86)\\Steam\\steam.exe";
-  //game[1].name="Steam Client";
-  game[1].icon="icon_steam";
+
+  for(int i=0; i < 100; i++)
+    load_xml(i);
 
   // Create buffer
   buffer = create_bitmap( SCREEN_W, SCREEN_H);
@@ -443,23 +450,16 @@ void setup(){
   // Load images
   // Game icons
 
-  game[2].icon="icon_csgo";
-  game[3].icon="icon_garrysmod";
-  game[4].icon="icon_dayofdefeat";
-  game[5].icon="icon_mame";
-  game[6].icon="icon_lol";
-  game[7].icon="icon_joystick";
-
   // Minigame
   ship_x = SCREEN_W/2;
   ship_y = SCREEN_H - 630;
 
   // Icon images
-  for (int i = 1; i < 8; i++){
-
-    if (!( icon[i] = load_bitmap((string("images/icons/") + game[i].icon.c_str() + string(".png")).c_str(), NULL)))
-      abort_on_error((string("Cannot find image images/icons/") + game[i].icon.c_str() + string(".png\nCheck your custom icons folder")).c_str());
-
+  for (int i = 1; i < 100; i++){
+    if(game[i].exists){
+      if (!( icon[i] = load_bitmap((string("images/icons/") + game[i].icon.c_str() + string(".png")).c_str(), NULL)))
+        abort_on_error((string("Cannot find image images/icons/") + game[i].icon.c_str() + string(".png\nCheck your custom icons folder")).c_str());
+    }
   }
 
   // Gui images
@@ -534,10 +534,10 @@ void setup(){
   destroy_font(f4);
   destroy_font(f5);
 
-  game[2].path="steam://rungameid/730";
-  game[2].name="Counter-strike: Global Offensive";
+  //game[2].path="steam://rungameid/730";
+  //game[2].name="Counter-strike: Global Offensive";
 
-  game[3].path="steam://rungameid/4000";
+ /* game[3].path="steam://rungameid/4000";
   game[3].name="Garry's Mod";
 
   game[4].path="steam://rungameid/30";
@@ -550,7 +550,13 @@ void setup(){
   game[6].name="League of Legends";
 
   game[7].path="crap";
-  game[7].name="Joystick";
+  game[7].name="Joystick";*/
+
+  //Get number of existing games
+  for(int i = 1; i < 100; i++){
+    if(game[i].exists)
+      existing_games++;
+  }
 
   // X and Y Positions
   for( int i = 1; i <= 7; i++){
