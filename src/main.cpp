@@ -3,15 +3,22 @@
 #include<time.h>
 #include<windows.h>
 #include<shellapi.h>
+#include <iostream>
 #include<fstream>
 #include<sstream>
 #include<string>
 #include<cstring>
+#include<vector>
+
+#include "rapidxml.hpp"
+#include "rapidxml_print.hpp"
 
 
 #define MENU 0
 #define JOYSTICK 1
 
+
+using namespace rapidxml;
 using namespace std;
 
 // Images
@@ -104,7 +111,7 @@ struct game{
   int x;
   int y;
   char* path;
-  char* name;
+  string name;
   string icon;
 }game[100];
 
@@ -167,27 +174,38 @@ bool joy_buttonpressed(){
 
 }
 
-// Write to settings file
-void write_settings(){
-  settings[3] = game[1].x;
+void load_xml(int game_index){
 
-  ofstream settings_file;
-  settings_file.open("games/game_1.txt");
+    xml_document<> doc;
+    xml_node<> * root_node;
+    // Read the xml file into a vector
+        //string xml_file = "games/games.xml";
 
-   settings_file << game[1].path<<" ";
-   settings_file << game[1].icon<<" ";
 
-   settings_file.close();
-}
+    ifstream theFile ("games/games.xml");
+    vector<char> xml_buffer((istreambuf_iterator<char>(theFile)), istreambuf_iterator<char>());
+    xml_buffer.push_back('\0');
+    // Parse the buffer using the xml file parsing library into doc
+    doc.parse<0>(&xml_buffer[0]);
+    // Find our root node
+    root_node = doc.first_node("data");
+    // Iterate over the brewerys
 
-// Read from settings file
-void read_settings(){
-  ifstream read("games/game_1.dat");
+    for (xml_node<> * brewery_node = root_node->first_node("game"); brewery_node; brewery_node = brewery_node->next_sibling())
+    {
 
-  read>>read_data;
+      //Interate over the beers
+      game[game_index].name = brewery_node->first_attribute("id")->value();
+   //   if(generatedNumberResult==random_number){
 
-  // game[1].path=string(read_data);
-  read.close();
+       // for(xml_node<> * beer_node = brewery_node->first_node("icon_path"); beer_node; beer_node = beer_node->next_sibling())
+       // {
+       //   game[game_index].icon = atoi(brewery_node->first_attribute("icon")->value());
+       //}
+
+      //}*/
+    }
+
 }
 
 // Setup colours for background
@@ -279,12 +297,6 @@ void update(){
     // Change background colour, with speed
     change_colours();
 
-    // Read and write settings
-    if(key[KEY_P])
-      write_settings();
-    if(key[KEY_O])
-      read_settings();
-
     // Step counter
     step++;
   }
@@ -319,10 +331,10 @@ void draw(){
 
     // Title
     draw_trans_sprite( buffer, overlay_text, 0, 50);
-    textout_centre_ex( buffer, segoe, game[game_focus].name, SCREEN_W/2, 80, makecol(0,0,0), -1);
+    textout_centre_ex( buffer, segoe, game[game_focus].name.c_str(), SCREEN_W/2, 80, makecol(0,0,0), -1);
 
     // Draw icon (stretched if needed)
-    for( int i = 1; i <= 7; i++){
+   for( int i = 1; i <= 7; i++){
       // Initial scale is original
       int new_scale = 0;
       // If its the current icon, enlarge it
@@ -397,6 +409,12 @@ void draw(){
 
 // Setup game
 void setup(){
+
+  load_xml(1);
+  game[1].path="C:\\Program Files (x86)\\Steam\\steam.exe";
+  //game[1].name="Steam Client";
+  game[1].icon="icon_steam";
+
   // Create buffer
   buffer = create_bitmap( SCREEN_W, SCREEN_H);
 
@@ -424,7 +442,7 @@ void setup(){
 
   // Load images
   // Game icons
-  game[1].icon="icon_steam";
+
   game[2].icon="icon_csgo";
   game[3].icon="icon_garrysmod";
   game[4].icon="icon_dayofdefeat";
@@ -438,8 +456,10 @@ void setup(){
 
   // Icon images
   for (int i = 1; i < 8; i++){
+
     if (!( icon[i] = load_bitmap((string("images/icons/") + game[i].icon.c_str() + string(".png")).c_str(), NULL)))
       abort_on_error((string("Cannot find image images/icons/") + game[i].icon.c_str() + string(".png\nCheck your custom icons folder")).c_str());
+
   }
 
   // Gui images
@@ -514,9 +534,6 @@ void setup(){
   destroy_font(f4);
   destroy_font(f5);
 
-  game[1].path="C:\\Program Files (x86)\\Steam\\steam.exe";
-  game[1].name="Steam Client";
-
   game[2].path="steam://rungameid/730";
   game[2].name="Counter-strike: Global Offensive";
 
@@ -545,7 +562,6 @@ void setup(){
 // MAIN loop
 int main(){
 
-  read_settings();
   // Setup allegro
   allegro_init();
   alpng_init();
@@ -558,7 +574,7 @@ int main(){
   // Init screen
   int w, h;
   get_desktop_resolution(&w, &h);
-  set_gfx_mode(GFX_AUTODETECT, w, h, 0, 0);
+  set_gfx_mode(GFX_AUTODETECT_WINDOWED, 1024, 768, 0, 0);
   install_sound(DIGI_AUTODETECT,MIDI_AUTODETECT,".");
 
   // Window Title

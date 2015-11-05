@@ -45,3 +45,18 @@
 	<string>
 	<cstring>
 
+1446682289 source:c:\users\danward\documents\github\arcade-gui\src\main.cpp
+	<allegro.h>
+	<alpng.h>
+	<time.h>
+	<windows.h>
+	<shellapi.h>
+	<iostream>
+	<fstream>
+	<sstream>
+	<string>
+	<cstring>
+	<vector>
+	"rapidxml.hpp"
+	"rapidxml_print.hpp"
+
