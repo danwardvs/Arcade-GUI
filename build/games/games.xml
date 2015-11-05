@@ -5,5 +5,6 @@
 	<game id="Counter-Strike: Global Offensive" number ="2" path="steam://rungameid/730" icon = "icon_csgo"></game>
 	<game id="Garry's Mod" number ="3" path="steam://rungameid/4000" icon = "icon_garrysmod"></game>
 	<game id="DAY OF KILLMEKITTENS" number ="4" path="steam://rungameid/30" icon = "meowmeow"></game>
+	<game id="LoL" number ="8" path="wheverever leauge is stored" icon="icon_lol"></game>
 </data>
 
