@@ -279,13 +279,21 @@ void update(){
     }
     // Scroll Left
     if((location_clicked( 0, 400, 0, SCREEN_H)|| joy[0].stick[0].axis[0].d1) && step > 9 && icon_transition == 0 && game_focus > 1){
-      game_focus--;
+      int i=game_focus-1;
+      while(!game[i].exists)
+        i--;
+      game_focus=i;
       icon_transition = -300;
       step = 0;
     }
     // Scroll Right
     if((location_clicked( SCREEN_W - 400,SCREEN_W, 0, SCREEN_H)|| joy[0].stick[0].axis[0].d2) && step>9 && icon_transition == 0 && game_focus < existing_games){
-      game_focus++;
+
+      //Allan, take your bracket standards elsewhere. They are not wanted.
+      int i=game_focus+1;
+      while(!game[i].exists)
+        i++;
+      game_focus=i;
       icon_transition = 300;
       step = 0;
     }
@@ -410,9 +418,18 @@ void draw(){
     // Minigame
     draw_trans_sprite( buffer, ship, ship_x, ship_y);
   }
+
+  //Trying to get rid of errors in my bread (debug)
+  if(2>1){
+         textprintf_ex(buffer,font,20,20,makecol(255,255,255),-1,"game_focus: %i",game_focus);
+
+  }
+
   if(!hide_mouse)
     draw_trans_sprite( buffer, cursor, mouse_x, mouse_y);
   draw_sprite(screen,buffer,0,0);
+
+
 }
 
 // Setup game
@@ -559,9 +576,14 @@ void setup(){
   }
 
   // X and Y Positions
-  for( int i = 1; i <= 7; i++){
-    game[i].x = (SCREEN_W/2 - 100) + (300 * i);
-    game[i].y = (SCREEN_H/2 - 100) + SCREEN_H/10;
+  int j;
+  for( int i = 1; i <= 100; i++){
+    if(game[i].exists){
+      j++;
+      game[i].x = (SCREEN_W/2 - 100) + (300 * j);
+      game[i].y = (SCREEN_H/2 - 100) + SCREEN_H/10;
+
+    }
   }
 }
 
