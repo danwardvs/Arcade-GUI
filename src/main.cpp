@@ -21,6 +21,9 @@
 using namespace rapidxml;
 using namespace std;
 
+//Amount of games this bugger can handle
+const int MAX_NUMBER_GAMES = 100;
+
 // Images
 BITMAP *buffer;
 BITMAP *cursor;
@@ -176,6 +179,16 @@ bool joy_buttonpressed(){
 
 }
 
+bool check_if_last_game(int game_number){
+  bool result=true;
+  for(int i=game_number+1; i<MAX_NUMBER_GAMES; i++){
+    if(game[i].exists){
+      result = false;
+    }
+  }
+  return result;
+}
+
 void load_xml(int game_index){
 
     xml_document<> doc;
@@ -287,7 +300,7 @@ void update(){
       step = 0;
     }
     // Scroll Right
-    if((location_clicked( SCREEN_W - 400,SCREEN_W, 0, SCREEN_H)|| joy[0].stick[0].axis[0].d2) && step>9 && icon_transition == 0 && game_focus < existing_games){
+    if((location_clicked( SCREEN_W - 400,SCREEN_W, 0, SCREEN_H)|| joy[0].stick[0].axis[0].d2) && step>9 && icon_transition == 0 && !check_if_last_game(game_focus)){
 
       //Allan, take your bracket standards elsewhere. They are not wanted.
       int i=game_focus+1;
