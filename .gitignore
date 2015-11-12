@@ -25,6 +25,10 @@
 *.out
 *.app
 
+# KILLME codeblocks
+*.layout
+
+
 # =========================
 # Operating System Files
 # =========================
