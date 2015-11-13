@@ -7,7 +7,7 @@
 	<game id="DAY OF KILLMEKITTENS" number ="4" path="steam://rungameid/30" icon = "meowmeow"></game>
 	<game id="LoL" number ="8" path="wheverever leauge is stored" icon="icon_lol"></game>
 	<game id="LoL" number ="12" path="wheverever leauge is stored" icon="icon_lol"></game>
-	<game id="LoL" number ="13" path="wheverever leauge is stored" icon="icon_lol"></game>
-	<game id="LoL" number ="19" path="wheverever leauge is stored" icon="icon_lol"></game>
+	<game id="Joystick" number ="13" path="local.joystick" icon="icon_joystick"></game>
+	<game id="asdf" number ="19" path="wheverever leauge is stored" icon="icon_lol"></game>
 </data>
 

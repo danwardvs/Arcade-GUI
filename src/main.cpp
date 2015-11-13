@@ -284,11 +284,13 @@ void update(){
   if( GAME_STATE==MENU){
     // Joystick APP
     if((location_clicked( 442, 837, 322, 717) || joy[0].button[2].b) && step > 9 && icon_transition == 0){
-      ShellExecute(NULL, "open", game[game_focus].path.c_str(), NULL, NULL, SW_SHOWDEFAULT);
-      step = 0;
-      //Fix hacky code
-      //if(game_focus == 7)
-      //  GAME_STATE=JOYSTICK;
+      if(game[game_focus].path=="local.joystick"){
+          GAME_STATE=JOYSTICK;
+      }else{
+        ShellExecute(NULL, "open", game[game_focus].path.c_str(), NULL, NULL, SW_SHOWDEFAULT);
+        step = 0;
+      }
+
     }
     // Scroll Left
     if((location_clicked( 0, 400, 0, SCREEN_H)|| joy[0].stick[0].axis[0].d1) && step > 9 && icon_transition == 0 && game_focus > 1){
