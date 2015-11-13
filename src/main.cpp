@@ -191,37 +191,36 @@ bool check_if_last_game(int game_number){
 
 void load_xml(int game_index){
 
+    //Setup xml datatypes
     xml_document<> doc;
     xml_node<> * root_node;
-    // Read the xml file into a vector
-        //string xml_file = "games/games.xml";
-
 
     ifstream theFile ("games/games.xml");
     vector<char> xml_buffer((istreambuf_iterator<char>(theFile)), istreambuf_iterator<char>());
     xml_buffer.push_back('\0');
+
     // Parse the buffer using the xml file parsing library into doc
     doc.parse<0>(&xml_buffer[0]);
+
     // Find our root node
     root_node = doc.first_node("data");
-    // Iterate over the brewerys
 
-    for (xml_node<> * brewery_node = root_node->first_node("game"); brewery_node; brewery_node = brewery_node->next_sibling())
+    //Iterates through the whole document.
+    //If it finds a game with the same number as
+    //the value in the argument, it reads the data.
+
+
+    for (xml_node<> * game_node = root_node->first_node("game"); game_node; game_node = game_node->next_sibling())
     {
-      if( convertStringToInt(brewery_node->first_attribute("number")->value()) == game_index){
-      //Interate over the beers
-        game[game_index].name = brewery_node->first_attribute("id")->value();
-        game[game_index].path = brewery_node->first_attribute("path")->value();
-        game[game_index].icon = brewery_node->first_attribute("icon")->value();
-        game[game_index].exists = true;
-      //if(generatedNumberResult==random_number){
+      if( convertStringToInt(game_node->first_attribute("number")->value()) == game_index){
 
-       // for(xml_node<> * beer_node = brewery_node->first_node("icon_path"); beer_node; beer_node = beer_node->next_sibling())
-       // {
-       //   game[game_index].icon = atoi(brewery_node->first_attribute("icon")->value());
-       //}
+        //Reads the data in the game node, assigning it to the game[] structure
+        game[game_index].name = game_node->first_attribute("id")->value();
+        game[game_index].path = game_node->first_attribute("path")->value();
+        game[game_index].icon = game_node->first_attribute("icon")->value();
+        game[game_index].exists = true;
+
       }
-      //}*/
     }
 
 }
