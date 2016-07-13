@@ -5,9 +5,9 @@ typedef struct{
   bool exists;
   int x;
   int y;
-  string path;
-  string name;
-  string icon_path;
+  std::string path;
+  std::string name;
+  std::string icon_path;
 
   BITMAP *icon;
 } game;
@@ -23,11 +23,11 @@ bool Menu::location_clicked( int min_x, int max_x, int min_y, int max_y){
 
 void Menu::load_games( char *file){
     //Setup xml datatypes
-    xml_document<> doc;
-    xml_node<> * root_node;
+    rapidxml::xml_document<> doc;
+    rapidxml::xml_node<> * root_node;
 
-    ifstream theFile (file);
-    vector<char> xml_buffer((istreambuf_iterator<char>(theFile)), istreambuf_iterator<char>());
+    std::ifstream theFile (file);
+    std::vector<char> xml_buffer((std::istreambuf_iterator<char>(theFile)), std::istreambuf_iterator<char>());
     xml_buffer.push_back('\0');
 
     // Parse the buffer using the xml file parsing library into doc
@@ -40,11 +40,11 @@ void Menu::load_games( char *file){
     //If it finds a game with the same number as
     //the value in the argument, it reads the data.
     int i = 0;
-    for (xml_node<> * game_node = root_node->first_node("game"); game_node; game_node = game_node->next_sibling()){
+    for (rapidxml::xml_node<> * game_node = root_node->first_node("game"); game_node; game_node = game_node->next_sibling()){
       //Reads the data in the game node, assigning it to the games[] structure
       games[i].name = game_node->first_attribute("id")->value();
       games[i].path = game_node->first_attribute("path")->value();
-      games[i].icon_path = "images/icons/" + string(game_node->first_attribute("icon")->value());
+      games[i].icon_path = "images/icons/" + std::string(game_node->first_attribute("icon")->value());
       games[i].icon = load_bitmap_ex( games[i].icon_path.c_str());
       games[i].exists = true;
 

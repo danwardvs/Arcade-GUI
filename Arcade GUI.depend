@@ -98,10 +98,10 @@
 1468425980 source:c:\users\allan\documents\games indev\arcade-gui\src\globals.cpp
 	"globals.h"
 
-1468428257 source:c:\users\allan\documents\games indev\arcade-gui\src\init.cpp
+1468429516 source:c:\users\allan\documents\games indev\arcade-gui\src\init.cpp
 	"Init.h"
 
-1468429472 c:\users\allan\documents\games indev\arcade-gui\include\menu.h
+1468429662 c:\users\allan\documents\games indev\arcade-gui\include\menu.h
 	"GameState.h"
 	<allegro.h>
 	<alpng.h>
@@ -123,7 +123,7 @@
 1468429483 source:c:\users\allan\documents\games indev\arcade-gui\src\menu.cpp
 	"Menu.h"
 
-1468429301 source:c:\users\allan\documents\games indev\arcade-gui\src\joystickmenu.cpp
+1468429613 source:c:\users\allan\documents\games indev\arcade-gui\src\joystickmenu.cpp
 	"JoystickMenu.h"
 
 1468428979 c:\users\allan\documents\games indev\arcade-gui\include\joystickmenu.h
@@ -139,6 +139,6 @@
 1468429281 source:c:\users\allan\documents\games indev\arcade-gui\src\color_background.cpp
 	"color_background.h"
 
-1468429078 c:\users\allan\documents\games indev\arcade-gui\include\color_background.h
+1468429633 c:\users\allan\documents\games indev\arcade-gui\include\color_background.h
 	<allegro.h>
 

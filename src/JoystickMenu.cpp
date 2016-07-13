@@ -8,7 +8,7 @@ JoystickMenu::JoystickMenu()
   // Allow transparency
   set_alpha_blender();
 
-  // Setup colours, options are VIBRANT, GREYSCALE, PASTEL, BALANCED and a speed (1 is default)
+  // Setup colours, options are BG_VIBRANT, BG_GRAYSCALE, BG_PASTEL, BG_BALANCED and a speed (1 is default)
   main_bg = new color_background( "images/overlay.png", BG_BALANCED, 0.2);
 
   // Minigame

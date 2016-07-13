@@ -11,7 +11,7 @@
 class color_background
 {
   public:
-    color_background(char *overlay, int preset_name, double speed);
+    color_background(char *overlay, int preset_name = BG_BALANCED, double speed = 0);
     virtual ~color_background();
 
     void setup_colours( int preset_name, double newSpeed);
