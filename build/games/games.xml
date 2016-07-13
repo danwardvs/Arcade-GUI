@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <data>
   
-    <game id="Steam Client" number ="1" path="C:\\Program Files (x86)\\Steam\\steam.exe" icon = "icon_steam"></game>
-	<game id="Counter-Strike: Global Offensive" number ="2" path="steam://rungameid/730" icon = "icon_csgo"></game>
-	<game id="Garry's Mod" number ="3" path="steam://rungameid/4000" icon = "icon_garrysmod"></game>
-	<game id="DAY OF KILLMEKITTENS" number ="4" path="steam://rungameid/30" icon = "meowmeow"></game>
-	<game id="LoL" number ="8" path="wheverever leauge is stored" icon="icon_lol"></game>
-	<game id="LoL" number ="12" path="wheverever leauge is stored" icon="icon_lol"></game>
-	<game id="Joystick" number ="13" path="local.joystick" icon="icon_joystick"></game>
-	<game id="asdf" number ="19" path="wheverever leauge is stored" icon="icon_lol"></game>
+    <game id="Steam Client" path="C:\\Program Files (x86)\\Steam\\steam.exe" icon = "icon_steam.png"></game>
+	<game id="Counter-Strike: Global Offensive" path="steam://rungameid/730" icon = "icon_csgo.png"></game>
+	<game id="Garry's Mod" path="steam://rungameid/4000" icon = "icon_garrysmod.png"></game>
+	<game id="DAY OF KILLMEKITTENS" path="steam://rungameid/30" icon = "meowmeow.png"></game>
+	<game id="LoL" path="wheverever leauge is stored" icon="icon_lol.png"></game>
+	<game id="Joystick" path="local.joystick" icon="icon_joystick.png"></game>
+	<game id="asdf" path="wheverever leauge is stored" icon="icon_lol.png"></game>
 </data>
 

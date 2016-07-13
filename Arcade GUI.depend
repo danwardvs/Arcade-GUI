@@ -60,3 +60,85 @@
 	"rapidxml.hpp"
 	"rapidxml_print.hpp"
 
+1468425454 source:c:\users\allan\documents\games indev\arcade-gui\src\tools.cpp
+	"tools.h"
+
+1468425447 c:\users\allan\documents\games indev\arcade-gui\include\tools.h
+	<allegro.h>
+	<time.h>
+	<string>
+	"globals.h"
+
+1468427593 source:c:\users\allan\documents\games indev\arcade-gui\src\main.cpp
+	<allegro.h>
+	<alpng.h>
+	"globals.h"
+	"tools.h"
+	"GameState.h"
+	"Init.h"
+	"Menu.h"
+	"JoystickMenu.h"
+
+1468427343 c:\users\allan\documents\games indev\arcade-gui\include\globals.h
+	<allegro.h>
+
+1396672756 c:\users\allan\documents\games indev\arcade-gui\include\gamestate.h
+
+1396724532 c:\users\allan\documents\games indev\arcade-gui\include\init.h
+	"GameState.h"
+	<allegro.h>
+	<alpng.h>
+	<string>
+	<vector>
+	"globals.h"
+	"tools.h"
+
+1396665024 source:c:\users\allan\documents\games indev\arcade-gui\src\gamestate.cpp
+
+1468425980 source:c:\users\allan\documents\games indev\arcade-gui\src\globals.cpp
+	"globals.h"
+
+1468428257 source:c:\users\allan\documents\games indev\arcade-gui\src\init.cpp
+	"Init.h"
+
+1468429472 c:\users\allan\documents\games indev\arcade-gui\include\menu.h
+	"GameState.h"
+	<allegro.h>
+	<alpng.h>
+	<time.h>
+	<windows.h>
+	<shellapi.h>
+	<iostream>
+	<fstream>
+	<sstream>
+	<string>
+	<cstring>
+	<vector>
+	"rapidxml.hpp"
+	"rapidxml_print.hpp"
+	"globals.h"
+	"tools.h"
+	"color_background.h"
+
+1468429483 source:c:\users\allan\documents\games indev\arcade-gui\src\menu.cpp
+	"Menu.h"
+
+1468429301 source:c:\users\allan\documents\games indev\arcade-gui\src\joystickmenu.cpp
+	"JoystickMenu.h"
+
+1468428979 c:\users\allan\documents\games indev\arcade-gui\include\joystickmenu.h
+	"GameState.h"
+	<allegro.h>
+	<alpng.h>
+	<string>
+	<vector>
+	"globals.h"
+	"tools.h"
+	"color_background.h"
+
+1468429281 source:c:\users\allan\documents\games indev\arcade-gui\src\color_background.cpp
+	"color_background.h"
+
+1468429078 c:\users\allan\documents\games indev\arcade-gui\include\color_background.h
+	<allegro.h>
+
