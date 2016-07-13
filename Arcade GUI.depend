@@ -127,7 +127,7 @@
 1468430953 source:c:\users\allan\documents\games indev\arcade-gui\src\joystickmenu.cpp
 	"JoystickMenu.h"
 
-1468429811 c:\users\allan\documents\games indev\arcade-gui\include\joystickmenu.h
+1468431598 c:\users\allan\documents\games indev\arcade-gui\include\joystickmenu.h
 	"GameState.h"
 	<allegro.h>
 	<alpng.h>

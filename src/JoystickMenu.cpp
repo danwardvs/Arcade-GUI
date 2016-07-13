@@ -18,19 +18,18 @@ JoystickMenu::JoystickMenu()
   // Joystick
   joystick_background = load_bitmap_ex( "images/joystick/joystick_background.png");
 
+  // Buttons
   for( int i = 0; i < 8; i++){
     std::string file_name = std::string("images/joystick/joystick_button_") + itos(i + 1) + std::string(".png");
     img_joystick_button[i]  = load_bitmap_ex( file_name.c_str());
   }
 
-  joystick_up = load_bitmap_ex( "images/joystick/joystick_up.png");
-  joystick_down = load_bitmap_ex( "images/joystick/joystick_down.png");
-  joystick_right = load_bitmap_ex( "images/joystick/joystick_right.png");
-  joystick_left = load_bitmap_ex( "images/joystick/joystick_left.png");
-  joystick_left_up = load_bitmap_ex( "images/joystick/joystick_left_up.png");
-  joystick_left_down = load_bitmap_ex( "images/joystick/joystick_left_down.png");
-  joystick_right_up = load_bitmap_ex( "images/joystick/joystick_right_up.png");
-  joystick_right_down = load_bitmap_ex( "images/joystick/joystick_right_down.png");
+  // Positions
+  for( int i = 0; i < 8; i++){
+    std::string file_name = std::string("images/joystick/joystick_pos_") + itos(i + 1) + std::string(".png");
+    img_joystick_positions[i]  = load_bitmap_ex( file_name.c_str());
+  }
+
   joystick_background2 = load_bitmap_ex( "images/joystick/background.png");
 
   ship = load_bitmap_ex("images/joystick/ship.png");
@@ -48,7 +47,7 @@ void JoystickMenu::update()
   // Ask joystick for keys
   poll_joystick();
 
-  // Mini Game
+  // Move ship in minigame
   if( (joy[0].stick[0].axis[0].d1 || key[KEY_LEFT]) && (ship_x > (SCREEN_W/2 - 298)))
     ship_x -= 2;
   else if( (joy[0].stick[0].axis[0].d2 || key[KEY_RIGHT]) && (ship_x < (SCREEN_W/2 + 298 - ship -> w)))
@@ -57,15 +56,18 @@ void JoystickMenu::update()
   // Change background colour
   main_bg -> change_colours();
 
-  //Hide mouse
+  //Hide mouse if joystick used
   if( joy_buttonpressed(0))
-    hide_mouse=true;
+    hide_mouse = true;
 
-  if( mouse_x != old_mouse_x || mouse_y != old_mouse_y)
+  // Detect mouse motion to unhide
+  if( mouse_x != old_mouse_x || mouse_y != old_mouse_y){
     hide_mouse = false;
-
-  old_mouse_x = mouse_x;
-  old_mouse_y = mouse_y;
+  }
+  else{
+    old_mouse_x = mouse_x;
+    old_mouse_y = mouse_y;
+  }
 }
 
 void JoystickMenu::draw()
@@ -96,29 +98,32 @@ void JoystickMenu::draw()
     draw_sprite( buffer, img_joystick_button[7], SCREEN_W/2 + 251, SCREEN_H - 546);
 
   // Stick
-  if( (joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d1) || key[KEY_RIGHT] && key[KEY_UP])
-    draw_sprite( buffer, joystick_right_up, SCREEN_W/2 - 306, SCREEN_H - 553);
-  else if( (joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d2) || key[KEY_RIGHT] && key[KEY_DOWN])
-    draw_sprite( buffer,joystick_right_down, SCREEN_W/2 - 306, SCREEN_H - 553);
-  else if( (joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d1) || key[KEY_LEFT] && key[KEY_UP])
-    draw_sprite( buffer, joystick_left_up, SCREEN_W/2 - 306, SCREEN_H - 553);
-  else if( (joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d2) || key[KEY_LEFT] && key[KEY_DOWN])
-    draw_sprite( buffer, joystick_left_down, SCREEN_W/2 - 306, SCREEN_H - 553);
+  if( (joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d1) || (key[KEY_LEFT] && key[KEY_UP]))
+    draw_sprite( buffer, img_joystick_positions[0], SCREEN_W/2 - 306, SCREEN_H - 553);
+  else if( (joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d1) || (key[KEY_RIGHT] && key[KEY_UP]))
+    draw_sprite( buffer, img_joystick_positions[2], SCREEN_W/2 - 306, SCREEN_H - 553);
+  else if( (joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d2) || (key[KEY_RIGHT] && key[KEY_DOWN]))
+    draw_sprite( buffer, img_joystick_positions[4], SCREEN_W/2 - 306, SCREEN_H - 553);
+  else if( (joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d2) || (key[KEY_LEFT] && key[KEY_DOWN]))
+    draw_sprite( buffer, img_joystick_positions[6], SCREEN_W/2 - 306, SCREEN_H - 553);
   else if( (joy[0].stick[0].axis[1].d1) || key[KEY_UP])
-    draw_sprite( buffer, joystick_up, SCREEN_W/2 - 306, SCREEN_H - 553);
-  else if( (joy[0].stick[0].axis[1].d2) || key[KEY_DOWN])
-    draw_sprite( buffer, joystick_down, SCREEN_W/2 - 306, SCREEN_H - 553);
-  else if( (joy[0].stick[0].axis[0].d1) || key[KEY_LEFT])
-    draw_sprite(buffer, joystick_left, SCREEN_W/2 - 306, SCREEN_H - 553);
+    draw_sprite( buffer, img_joystick_positions[1], SCREEN_W/2 - 306, SCREEN_H - 553);
   else if( (joy[0].stick[0].axis[0].d2) || key[KEY_RIGHT])
-    draw_sprite( buffer, joystick_right, SCREEN_W/2 - 306, SCREEN_H - 553);
+    draw_sprite( buffer, img_joystick_positions[3], SCREEN_W/2 - 306, SCREEN_H - 553);
+  else if( (joy[0].stick[0].axis[1].d2) || key[KEY_DOWN])
+    draw_sprite( buffer, img_joystick_positions[5], SCREEN_W/2 - 306, SCREEN_H - 553);
+  else if( (joy[0].stick[0].axis[0].d1) || key[KEY_LEFT])
+    draw_sprite( buffer, img_joystick_positions[7], SCREEN_W/2 - 306, SCREEN_H - 553);
+
 
   // Minigame
   draw_trans_sprite( buffer, ship, ship_x, ship_y);
 
+  // Draw mouse if joystick not in use
   if(!hide_mouse)
     draw_trans_sprite( buffer, cursor, mouse_x, mouse_y);
 
+  // Buffer to screen
   draw_sprite(screen,buffer,0,0);
 }
 

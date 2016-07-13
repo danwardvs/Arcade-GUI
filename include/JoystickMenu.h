@@ -27,18 +27,10 @@ class JoystickMenu : public GameState
     BITMAP *overlay_text;
     BITMAP *overlay_text_temp;
 
-    BITMAP *joystick_right;
-    BITMAP *joystick_right_up;
-    BITMAP *joystick_right_down;
-    BITMAP *joystick_up;
-    BITMAP *joystick_left;
-    BITMAP *joystick_left_up;
-    BITMAP *joystick_left_down;
-    BITMAP *joystick_down;
-
     BITMAP *joystick_background;
 
     BITMAP *img_joystick_button[8];
+    BITMAP *img_joystick_positions[8];
 
     // Minigame
     BITMAP *ship;
