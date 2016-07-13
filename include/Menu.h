@@ -5,15 +5,15 @@
 
 #include <allegro.h>
 #include <alpng.h>
-#include <time.h>/*
-#include <windows.h>
-#include <shellapi.h>*/
-#include <iostream>
 #include <fstream>
-#include <sstream>
 #include <string>
-#include <cstring>
 #include <vector>
+
+// Overrite name of windows bitmaps for compatability
+#define BITMAP WINDOWS_BITMAP
+#include <windows.h>
+#include <shellapi.h>
+#undef BITMAP
 
 #include "rapidxml.hpp"
 #include "rapidxml_print.hpp"

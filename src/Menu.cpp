@@ -67,9 +67,6 @@ Menu::Menu()
   // Allow transparency
   set_alpha_blender();
 
-  // Init random number generator
-  srand(time(NULL));
-
   // Load games
   load_games("games/games.xml");
 
@@ -102,7 +99,7 @@ void Menu::update()
         set_next_state( STATE_JOYSTICK);
     }
     else{
-      //ShellExecute(NULL, "open", games[game_focus].path.c_str(), NULL, NULL, SW_SHOWDEFAULT);
+      ShellExecute(NULL, "open", games[game_focus].path.c_str(), NULL, NULL, SW_SHOWDEFAULT);
       step = 0;
     }
   }

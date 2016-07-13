@@ -7,6 +7,6 @@
 	<game id="DAY OF KILLMEKITTENS" path="steam://rungameid/30" icon = "meowmeow.png"></game>
 	<game id="LoL" path="wheverever leauge is stored" icon="icon_lol.png"></game>
 	<game id="Joystick" path="local.joystick" icon="icon_joystick.png"></game>
-	<game id="asdf" path="wheverever leauge is stored" icon="icon_lol.png"></game>
+	<game id="CMD" path="C:\WINDOWS\system32\cmd.exe" icon="console.png"></game>
 </data>
 

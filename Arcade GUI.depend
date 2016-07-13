@@ -102,29 +102,25 @@
 1468429516 source:c:\users\allan\documents\games indev\arcade-gui\src\init.cpp
 	"Init.h"
 
-1468429662 c:\users\allan\documents\games indev\arcade-gui\include\menu.h
+1468432376 c:\users\allan\documents\games indev\arcade-gui\include\menu.h
 	"GameState.h"
 	<allegro.h>
 	<alpng.h>
-	<time.h>
+	<fstream>
+	<string>
+	<vector>
 	<windows.h>
 	<shellapi.h>
-	<iostream>
-	<fstream>
-	<sstream>
-	<string>
-	<cstring>
-	<vector>
 	"rapidxml.hpp"
 	"rapidxml_print.hpp"
 	"globals.h"
 	"tools.h"
 	"color_background.h"
 
-1468429719 source:c:\users\allan\documents\games indev\arcade-gui\src\menu.cpp
+1468432386 source:c:\users\allan\documents\games indev\arcade-gui\src\menu.cpp
 	"Menu.h"
 
-1468430953 source:c:\users\allan\documents\games indev\arcade-gui\src\joystickmenu.cpp
+1468431898 source:c:\users\allan\documents\games indev\arcade-gui\src\joystickmenu.cpp
 	"JoystickMenu.h"
 
 1468431598 c:\users\allan\documents\games indev\arcade-gui\include\joystickmenu.h
