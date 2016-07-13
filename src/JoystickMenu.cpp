@@ -17,14 +17,11 @@ JoystickMenu::JoystickMenu()
 
   // Joystick
   joystick_background = load_bitmap_ex( "images/joystick/joystick_background.png");
-  joystick_button_1  = load_bitmap_ex( "images/joystick/joystick_button_1.png");
-  joystick_button_2  = load_bitmap_ex( "images/joystick/joystick_button_2.png");
-  joystick_button_3  = load_bitmap_ex( "images/joystick/joystick_button_3.png");
-  joystick_button_4  = load_bitmap_ex( "images/joystick/joystick_button_4.png");
-  joystick_button_5  = load_bitmap_ex( "images/joystick/joystick_button_5.png");
-  joystick_button_6  = load_bitmap_ex( "images/joystick/joystick_button_6.png");
-  joystick_button_7  = load_bitmap_ex( "images/joystick/joystick_button_7.png");
-  joystick_button_8  = load_bitmap_ex( "images/joystick/joystick_button_8.png");
+
+  for( int i = 0; i < 8; i++){
+    std::string file_name = std::string("images/joystick/joystick_button_") + itos(i + 1) + std::string(".png");
+    img_joystick_button[i]  = load_bitmap_ex( file_name.c_str());
+  }
 
   joystick_up = load_bitmap_ex( "images/joystick/joystick_up.png");
   joystick_down = load_bitmap_ex( "images/joystick/joystick_down.png");
@@ -52,9 +49,9 @@ void JoystickMenu::update()
   poll_joystick();
 
   // Mini Game
-  if( joy[0].stick[0].axis[0].d1 && (ship_x > (SCREEN_W/2 - 298)))
+  if( (joy[0].stick[0].axis[0].d1 || key[KEY_LEFT]) && (ship_x > (SCREEN_W/2 - 298)))
     ship_x -= 2;
-  else if( joy[0].stick[0].axis[0].d2 && (ship_x < (SCREEN_W/2 + 298 - ship -> w)))
+  else if( (joy[0].stick[0].axis[0].d2 || key[KEY_RIGHT]) && (ship_x < (SCREEN_W/2 + 298 - ship -> w)))
     ship_x += 2;
 
   // Change background colour
@@ -81,39 +78,39 @@ void JoystickMenu::draw()
   draw_trans_sprite( buffer, joystick_background , SCREEN_W/2 - (joystick_background  -> w/2), SCREEN_H - (joystick_background -> h));
 
   // Buttons
-  if( joy[0].button[0].b)
-    draw_sprite( buffer, joystick_button_1, SCREEN_W/2 - 78, SCREEN_H - 425);
-  if( joy[0].button[1].b)
-    draw_sprite( buffer, joystick_button_2, SCREEN_W/2 + 30, SCREEN_H - 440);
-  if( joy[0].button[2].b)
-    draw_sprite( buffer, joystick_button_3, SCREEN_W/2 + 135, SCREEN_H - 428);
-  if( joy[0].button[3].b)
-    draw_sprite( buffer, joystick_button_4, SCREEN_W/2 - 82, SCREEN_H - 491);
-  if( joy[0].button[4].b)
-    draw_sprite( buffer, joystick_button_5, SCREEN_W/2 + 20, SCREEN_H - 511);
-  if( joy[0].button[5].b)
-    draw_sprite( buffer, joystick_button_6, SCREEN_W/2 + 122, SCREEN_H - 491);
-  if( joy[0].button[10].b)
-    draw_sprite( buffer, joystick_button_7, SCREEN_W/2 + 179, SCREEN_H - 552);
-  if( joy[0].button[11].b)
-    draw_sprite( buffer, joystick_button_8, SCREEN_W/2 + 251, SCREEN_H - 546);
+  if( joy[0].button[0].b || key[KEY_1])
+    draw_sprite( buffer, img_joystick_button[0], SCREEN_W/2 - 78, SCREEN_H - 425);
+  if( joy[0].button[1].b || key[KEY_2])
+    draw_sprite( buffer, img_joystick_button[1], SCREEN_W/2 + 30, SCREEN_H - 440);
+  if( joy[0].button[2].b || key[KEY_3])
+    draw_sprite( buffer, img_joystick_button[2], SCREEN_W/2 + 135, SCREEN_H - 428);
+  if( joy[0].button[3].b || key[KEY_4])
+    draw_sprite( buffer, img_joystick_button[3], SCREEN_W/2 - 82, SCREEN_H - 491);
+  if( joy[0].button[4].b || key[KEY_5])
+    draw_sprite( buffer, img_joystick_button[4], SCREEN_W/2 + 20, SCREEN_H - 511);
+  if( joy[0].button[5].b || key[KEY_6])
+    draw_sprite( buffer, img_joystick_button[5], SCREEN_W/2 + 122, SCREEN_H - 491);
+  if( joy[0].button[10].b || key[KEY_7])
+    draw_sprite( buffer, img_joystick_button[6], SCREEN_W/2 + 179, SCREEN_H - 552);
+  if( joy[0].button[11].b || key[KEY_8])
+    draw_sprite( buffer, img_joystick_button[7], SCREEN_W/2 + 251, SCREEN_H - 546);
 
   // Stick
-  if( joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d1)
+  if( (joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d1) || key[KEY_RIGHT] && key[KEY_UP])
     draw_sprite( buffer, joystick_right_up, SCREEN_W/2 - 306, SCREEN_H - 553);
-  else if( joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d2)
+  else if( (joy[0].stick[0].axis[0].d2 && joy[0].stick[0].axis[1].d2) || key[KEY_RIGHT] && key[KEY_DOWN])
     draw_sprite( buffer,joystick_right_down, SCREEN_W/2 - 306, SCREEN_H - 553);
-  else if( joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d1)
+  else if( (joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d1) || key[KEY_LEFT] && key[KEY_UP])
     draw_sprite( buffer, joystick_left_up, SCREEN_W/2 - 306, SCREEN_H - 553);
-  else if( joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d2)
+  else if( (joy[0].stick[0].axis[0].d1 && joy[0].stick[0].axis[1].d2) || key[KEY_LEFT] && key[KEY_DOWN])
     draw_sprite( buffer, joystick_left_down, SCREEN_W/2 - 306, SCREEN_H - 553);
-  else if( joy[0].stick[0].axis[1].d1)
+  else if( (joy[0].stick[0].axis[1].d1) || key[KEY_UP])
     draw_sprite( buffer, joystick_up, SCREEN_W/2 - 306, SCREEN_H - 553);
-  else if( joy[0].stick[0].axis[1].d2)
+  else if( (joy[0].stick[0].axis[1].d2) || key[KEY_DOWN])
     draw_sprite( buffer, joystick_down, SCREEN_W/2 - 306, SCREEN_H - 553);
-  else if( joy[0].stick[0].axis[0].d1)
+  else if( (joy[0].stick[0].axis[0].d1) || key[KEY_LEFT])
     draw_sprite(buffer, joystick_left, SCREEN_W/2 - 306, SCREEN_H - 553);
-  else if( joy[0].stick[0].axis[0].d2)
+  else if( (joy[0].stick[0].axis[0].d2) || key[KEY_RIGHT])
     draw_sprite( buffer, joystick_right, SCREEN_W/2 - 306, SCREEN_H - 553);
 
   // Minigame

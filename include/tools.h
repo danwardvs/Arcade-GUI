@@ -10,6 +10,7 @@
 #include <allegro.h>
 #include <time.h>
 #include <string>
+#include <sstream>
 #include "globals.h"
 
 extern int game_state;
@@ -36,6 +37,9 @@ extern bool collision(int xMin1, int xMax1, int xMin2, int xMax2, int yMin1, int
 
 // Convert string to int
 extern int stoi(std::string text);
+
+// String to int
+extern std::string itos(int number);
 
 // Check if joystick in use
 extern bool joy_buttonpressed( int joystick_num);

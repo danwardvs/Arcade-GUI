@@ -72,6 +72,13 @@ int stoi(std::string text){
   return atoi(text.c_str());
 }
 
+//Convert int to string
+std::string itos(int number){
+  std::stringstream ss;
+  ss << number;
+  return ss.str();
+}
+
 // Joystick button pressed
 bool joy_buttonpressed( int joystick_num){
   for(int i = 0; i < joy[joystick_num].num_buttons; i++)

@@ -60,13 +60,14 @@
 	"rapidxml.hpp"
 	"rapidxml_print.hpp"
 
-1468425454 source:c:\users\allan\documents\games indev\arcade-gui\src\tools.cpp
+1468430137 source:c:\users\allan\documents\games indev\arcade-gui\src\tools.cpp
 	"tools.h"
 
-1468425447 c:\users\allan\documents\games indev\arcade-gui\include\tools.h
+1468430253 c:\users\allan\documents\games indev\arcade-gui\include\tools.h
 	<allegro.h>
 	<time.h>
 	<string>
+	<sstream>
 	"globals.h"
 
 1468427593 source:c:\users\allan\documents\games indev\arcade-gui\src\main.cpp
@@ -120,13 +121,13 @@
 	"tools.h"
 	"color_background.h"
 
-1468429483 source:c:\users\allan\documents\games indev\arcade-gui\src\menu.cpp
+1468429719 source:c:\users\allan\documents\games indev\arcade-gui\src\menu.cpp
 	"Menu.h"
 
-1468429613 source:c:\users\allan\documents\games indev\arcade-gui\src\joystickmenu.cpp
+1468430231 source:c:\users\allan\documents\games indev\arcade-gui\src\joystickmenu.cpp
 	"JoystickMenu.h"
 
-1468428979 c:\users\allan\documents\games indev\arcade-gui\include\joystickmenu.h
+1468429811 c:\users\allan\documents\games indev\arcade-gui\include\joystickmenu.h
 	"GameState.h"
 	<allegro.h>
 	<alpng.h>
