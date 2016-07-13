@@ -14,6 +14,7 @@
 				<Option compiler="gcc" />
 				<Compiler>
 					<Add option="-O2" />
+					<Add directory="include" />
 				</Compiler>
 				<Linker>
 					<Add option="-s" />
@@ -25,8 +26,23 @@
 		</Build>
 		<Compiler>
 			<Add option="-Wall" />
+			<Add directory="include" />
 		</Compiler>
-		<Unit filename="main.cpp" />
+		<Unit filename="include/GameState.h" />
+		<Unit filename="include/Init.h" />
+		<Unit filename="include/JoystickMenu.h" />
+		<Unit filename="include/Menu.h" />
+		<Unit filename="include/color_background.h" />
+		<Unit filename="include/globals.h" />
+		<Unit filename="include/tools.h" />
+		<Unit filename="src/GameState.cpp" />
+		<Unit filename="src/Init.cpp" />
+		<Unit filename="src/JoystickMenu.cpp" />
+		<Unit filename="src/Menu.cpp" />
+		<Unit filename="src/color_background.cpp" />
+		<Unit filename="src/globals.cpp" />
+		<Unit filename="src/main.cpp" />
+		<Unit filename="src/tools.cpp" />
 		<Extensions>
 			<code_completion />
 			<envvars />

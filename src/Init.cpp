@@ -12,7 +12,7 @@ Init::Init()
   install_sound(DIGI_AUTODETECT,MIDI_AUTODETECT,".");
 
   // Load fonts
-  segoe = load_font_ex("segoe_ui_semibold_bold_62pt_antia.pcx");
+  segoe = load_font_ex("fonts/segoe_ui_semibold_bold_62pt_antia.pcx");
 }
 
 void Init::update()
