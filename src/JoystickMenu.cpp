@@ -79,19 +79,19 @@ void JoystickMenu::draw()
 
   // Buttons
   if( joy[0].button[0].b || key[KEY_1])
-    draw_sprite( buffer, img_joystick_button[0], SCREEN_W/2 - 78, SCREEN_H - 425);
+    draw_sprite( buffer, img_joystick_button[0], SCREEN_W/2 - 78, SCREEN_H - 424);
   if( joy[0].button[1].b || key[KEY_2])
     draw_sprite( buffer, img_joystick_button[1], SCREEN_W/2 + 30, SCREEN_H - 440);
   if( joy[0].button[2].b || key[KEY_3])
-    draw_sprite( buffer, img_joystick_button[2], SCREEN_W/2 + 135, SCREEN_H - 428);
+    draw_sprite( buffer, img_joystick_button[2], SCREEN_W/2 + 135, SCREEN_H - 427);
   if( joy[0].button[3].b || key[KEY_4])
-    draw_sprite( buffer, img_joystick_button[3], SCREEN_W/2 - 82, SCREEN_H - 491);
+    draw_sprite( buffer, img_joystick_button[3], SCREEN_W/2 - 81, SCREEN_H - 491);
   if( joy[0].button[4].b || key[KEY_5])
-    draw_sprite( buffer, img_joystick_button[4], SCREEN_W/2 + 20, SCREEN_H - 511);
+    draw_sprite( buffer, img_joystick_button[4], SCREEN_W/2 + 20, SCREEN_H - 513);
   if( joy[0].button[5].b || key[KEY_6])
-    draw_sprite( buffer, img_joystick_button[5], SCREEN_W/2 + 122, SCREEN_H - 491);
+    draw_sprite( buffer, img_joystick_button[5], SCREEN_W/2 + 122, SCREEN_H - 492);
   if( joy[0].button[10].b || key[KEY_7])
-    draw_sprite( buffer, img_joystick_button[6], SCREEN_W/2 + 179, SCREEN_H - 552);
+    draw_sprite( buffer, img_joystick_button[6], SCREEN_W/2 + 181, SCREEN_H - 551);
   if( joy[0].button[11].b || key[KEY_8])
     draw_sprite( buffer, img_joystick_button[7], SCREEN_W/2 + 251, SCREEN_H - 546);
 
