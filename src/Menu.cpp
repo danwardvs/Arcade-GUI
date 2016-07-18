@@ -163,6 +163,8 @@ void Menu::draw()
     // Output text
     textout_ex( temp_font_buffer, segoe, games[game_focus].name.c_str(), 0, 0, makecol( 0, 0, 0), -1);
     stretch_sprite( buffer, temp_font_buffer, 40, 80 + (text_height_temp - text_height_new_temp)/2, SCREEN_W - 80, text_height_new_temp);
+    // Clean up
+    destroy_bitmap( temp_font_buffer);
   }
   // Just right
   else{
