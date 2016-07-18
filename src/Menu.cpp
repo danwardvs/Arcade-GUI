@@ -105,13 +105,13 @@ void Menu::update()
   }
 
   // Scroll Left
-  if((location_clicked( 0, 400, 0, SCREEN_H)|| joy[0].stick[0].axis[0].d1) && step > 9 && icon_transition == 0 && game_focus > 0){
+  if((location_clicked( 0, 400, 0, SCREEN_H)|| joy[0].stick[0].axis[0].d1 || key[KEY_LEFT]) && step > 9 && icon_transition == 0 && game_focus > 0){
     game_focus--;
     icon_transition = -300;
     step = 0;
   }
   // Scroll Right
-  if((location_clicked( SCREEN_W - 400,SCREEN_W, 0, SCREEN_H)|| joy[0].stick[0].axis[0].d2) && step>9 && icon_transition == 0 && game_focus < existing_games - 1){
+  if((location_clicked( SCREEN_W - 400,SCREEN_W, 0, SCREEN_H)|| joy[0].stick[0].axis[0].d2 || key[KEY_RIGHT]) && step>9 && icon_transition == 0 && game_focus < existing_games - 1){
     game_focus++;
     icon_transition = 300;
     step = 0;
@@ -151,7 +151,23 @@ void Menu::draw()
 
   // Title
   draw_trans_sprite( buffer, overlay_text, 0, 50);
-  textout_centre_ex( buffer, segoe, games[game_focus].name.c_str(), SCREEN_W/2, 80, makecol(0,0,0), -1);
+  // Too big
+  if( text_length( segoe, games[game_focus].name.c_str()) > SCREEN_W - 80){
+    // Temps
+    int text_length_temp = text_length( segoe, games[game_focus].name.c_str());
+    int text_height_temp = text_height( segoe);
+    int text_height_new_temp = text_height_temp/(text_length_temp/SCREEN_W);
+    // Create temp buffer
+    BITMAP *temp_font_buffer = create_bitmap( text_length_temp, text_height_temp);
+    rectfill( temp_font_buffer, 0, 0, text_length_temp, text_height_temp, makecol( 255, 0, 255));
+    // Output text
+    textout_ex( temp_font_buffer, segoe, games[game_focus].name.c_str(), 0, 0, makecol( 0, 0, 0), -1);
+    stretch_sprite( buffer, temp_font_buffer, 40, 80 + (text_height_temp - text_height_new_temp)/2, SCREEN_W - 80, text_height_new_temp);
+  }
+  // Just right
+  else{
+    textout_centre_ex( buffer, segoe, games[game_focus].name.c_str(), SCREEN_W/2, 80, makecol( 0, 0, 0), -1);
+  }
 
   // Draw icon (stretched if needed)
   for( int i = 0; i < existing_games; i++){

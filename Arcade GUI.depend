@@ -70,7 +70,7 @@
 	<sstream>
 	"globals.h"
 
-1468427593 source:c:\users\allan\documents\games indev\arcade-gui\src\main.cpp
+1468807554 source:c:\users\allan\documents\games indev\arcade-gui\src\main.cpp
 	<allegro.h>
 	<alpng.h>
 	"globals.h"
@@ -99,7 +99,7 @@
 1468425980 source:c:\users\allan\documents\games indev\arcade-gui\src\globals.cpp
 	"globals.h"
 
-1468429516 source:c:\users\allan\documents\games indev\arcade-gui\src\init.cpp
+1468440488 source:c:\users\allan\documents\games indev\arcade-gui\src\init.cpp
 	"Init.h"
 
 1468432376 c:\users\allan\documents\games indev\arcade-gui\include\menu.h
@@ -117,7 +117,7 @@
 	"tools.h"
 	"color_background.h"
 
-1468432386 source:c:\users\allan\documents\games indev\arcade-gui\src\menu.cpp
+1468808853 source:c:\users\allan\documents\games indev\arcade-gui\src\menu.cpp
 	"Menu.h"
 
 1468431898 source:c:\users\allan\documents\games indev\arcade-gui\src\joystickmenu.cpp
